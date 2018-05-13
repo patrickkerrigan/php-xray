@@ -1,0 +1,20 @@
+{
+    "name": "pkerrigan/xray",
+    "description": "A PHP instrumentation library for AWS X-Ray",
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Patrick Kerrigan",
+            "homepage": "https://patrickkerrigan.uk/"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {"Pkerrigan\\Xray\\": "src/"}
+    },
+
+    "autoload-dev": {
+        "psr-4": {"Pkerrigan\\Xray\\": "tests/"}
+    }
+}
