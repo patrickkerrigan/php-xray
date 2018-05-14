@@ -7,7 +7,7 @@ namespace Pkerrigan\Xray;
  * @author Patrick Kerrigan (patrickkerrigan.uk)
  * @since 13/05/2018
  */
-class DaemonTraceSubmitter implements TraceSubmitter
+class DaemonSegmentSubmitter implements SegmentSubmitter
 {
     /**
      * @var string
@@ -24,14 +24,14 @@ class DaemonTraceSubmitter implements TraceSubmitter
         $this->port = $port;
     }
 
-    public function submitTrace(Trace $trace)
+    public function submitSegment(Segment $segment)
     {
         $header = [
             'format' => 'json',
             'version' => 1
         ];
 
-        $packet = implode("\n", array_map('json_encode', [$header, $trace]));
+        $packet = implode("\n", array_map('json_encode', [$header, $segment]));
 
         $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
         socket_sendto($socket, $packet, strlen($packet), 0, $this->host, $this->port);

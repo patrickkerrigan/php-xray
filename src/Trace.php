@@ -56,16 +56,6 @@ class Trace extends HttpSegment
         return $this;
     }
 
-    public function end(TraceSubmitter $submitter = null)
-    {
-        parent::end();
-
-        $submitter = $submitter ?? new DaemonTraceSubmitter();
-        $submitter->submitTrace($this);
-
-        return $this;
-    }
-
     /**
      * @inheritdoc
      */

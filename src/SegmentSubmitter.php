@@ -7,7 +7,7 @@ namespace Pkerrigan\Xray;
  * @author Patrick Kerrigan (patrickkerrigan.uk)
  * @since 13/05/2018
  */
-interface TraceSubmitter
+interface SegmentSubmitter
 {
-    public function submitTrace(Trace $trace);
+    public function submitSegment(Segment $segment);
 }

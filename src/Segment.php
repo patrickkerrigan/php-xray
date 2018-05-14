@@ -80,6 +80,14 @@ class Segment implements JsonSerializable
     }
 
     /**
+     * @param SegmentSubmitter $submitter
+     */
+    public function submit(SegmentSubmitter $submitter)
+    {
+        $submitter->submitSegment($this);
+    }
+
+    /**
      * @inheritdoc
      */
     public function jsonSerialize()
