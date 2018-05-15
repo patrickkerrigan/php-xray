@@ -7,8 +7,10 @@ namespace Pkerrigan\Xray;
  * @author Patrick Kerrigan (patrickkerrigan.uk)
  * @since 13/05/2018
  */
-class Trace extends HttpSegment
+class Trace extends Segment
 {
+    use HttpTrait;
+
     /**
      * @var static
      */
@@ -32,12 +34,26 @@ class Trace extends HttpSegment
     }
 
     /**
-     * @param string $traceId
+     * @param string $traceHeader
      * @return static
      */
-    public function setTraceId(string $traceId)
+    public function setTraceHeader(string $traceHeader = null)
     {
-        $this->traceId = $traceId;
+        if (is_null($traceHeader)) {
+            return $this;
+        }
+
+        $parts = explode(';', $traceHeader);
+
+        $variables = array_map(function ($str): array {
+            return explode('=', $str);
+        }, $parts);
+
+        $variables = array_column($variables, 1, 0);
+
+        $this->traceId = $variables['Root'] ?? null;
+        $this->setSampled($variables['Sampled'] ?? false);
+        $this->setParentId($variables['Parent'] ?? null);
 
         return $this;
     }
@@ -45,12 +61,16 @@ class Trace extends HttpSegment
     /**
      * @inheritdoc
      */
-    public function begin()
+    public function begin(int $samplePercentage = 10)
     {
         parent::begin();
 
         if (is_null($this->traceId)) {
             $this->generateTraceId();
+        }
+
+        if (!$this->isSampled()) {
+            $this->sampled = (random_int(0, 99) < $samplePercentage);
         }
 
         return $this;
@@ -64,6 +84,7 @@ class Trace extends HttpSegment
         $data = parent::jsonSerialize();
 
         $data['trace_id'] = $this->traceId;
+        $data['http'] = $this->serialiseHttpData();
 
         return array_filter($data);
     }
@@ -74,5 +95,13 @@ class Trace extends HttpSegment
         $uuid = bin2hex(random_bytes(12));
 
         $this->traceId = "1-{$startHex}-{$uuid}";
+    }
+
+    /**
+     * @return string
+     */
+    public function getTraceId(): string
+    {
+        return $this->traceId;
     }
 }

@@ -7,7 +7,7 @@ namespace Pkerrigan\Xray;
  * @author Patrick Kerrigan (patrickkerrigan.uk)
  * @since 14/05/2018
  */
-class SqlSegment extends Segment
+class SqlSegment extends RemoteSegment
 {
     /**
      * @var string|null
@@ -118,8 +118,6 @@ class SqlSegment extends Segment
     public function jsonSerialize()
     {
         $data = parent::jsonSerialize();
-
-        $data['namespace'] = 'remote';
 
         $data['sql'] = array_filter([
             'url' => $this->url,

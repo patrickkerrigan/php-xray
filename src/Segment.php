@@ -16,6 +16,10 @@ class Segment implements JsonSerializable
      */
     protected $id;
     /**
+     * @var string
+     */
+    protected $parentId;
+    /**
      * @var string|null
      */
     protected $name;
@@ -31,6 +35,18 @@ class Segment implements JsonSerializable
      * @var Segment[]
      */
     protected $subsegments;
+    /**
+     * @var bool
+     */
+    protected $error = false;
+    /**
+     * @var bool
+     */
+    protected $fault = false;
+    /**
+     * @var bool
+     */
+    protected $sampled = false;
 
     public function __construct()
     {
@@ -69,12 +85,39 @@ class Segment implements JsonSerializable
     }
 
     /**
+     * @param bool $error
+     * @return static
+     */
+    public function setError(bool $error)
+    {
+        $this->error = $error;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $fault
+     * @return static
+     */
+    public function setFault(bool $fault)
+    {
+        $this->fault = $fault;
+
+        return $this;
+    }
+
+    /**
      * @param Segment $subsegment
      * @return static
      */
     public function addSubsegment(Segment $subsegment)
     {
+        if (!$this->isOpen()) {
+            return $this;
+        }
+
         $this->subsegments[] = $subsegment;
+        $subsegment->setSampled($this->isSampled());
 
         return $this;
     }
@@ -84,6 +127,10 @@ class Segment implements JsonSerializable
      */
     public function submit(SegmentSubmitter $submitter)
     {
+        if (!$this->isSampled()) {
+            return;
+        }
+
         $submitter->submitSegment($this);
     }
 
@@ -94,10 +141,67 @@ class Segment implements JsonSerializable
     {
         return array_filter([
             'id' => $this->id,
+            'parent_id' => $this->parentId,
             'name' => $this->name ?? null,
             'start_time' => $this->startTime,
             'end_time' => $this->endTime,
-            'subsegments' => empty($this->subsegments) ? null : $this->subsegments
+            'subsegments' => empty($this->subsegments) ? null : $this->subsegments,
+            'fault' => $this->fault,
+            'error' => $this->error
         ]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSampled(): bool
+    {
+        return $this->sampled;
+    }
+
+    /**
+     * @param bool $sampled
+     * @return static
+     */
+    public function setSampled(bool $sampled)
+    {
+        $this->sampled = $sampled;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string $parentId
+     * @return static
+     */
+    public function setParentId(string $parentId = null)
+    {
+        $this->parentId = $parentId;
+
+        return $this;
+    }
+
+    public function isOpen(): bool
+    {
+        return !is_null($this->startTime) && is_null($this->endTime);
+    }
+
+    public function getCurrentSegment(): Segment
+    {
+        foreach ($this->subsegments as $subsegment) {
+            if ($subsegment->isOpen()) {
+                return $subsegment->getCurrentSegment();
+            }
+        }
+
+        return $this;
     }
 }
