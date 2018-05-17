@@ -34,7 +34,7 @@ class Segment implements JsonSerializable
     /**
      * @var Segment[]
      */
-    protected $subsegments;
+    protected $subsegments = [];
     /**
      * @var bool
      */

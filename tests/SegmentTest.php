@@ -100,6 +100,26 @@ class SegmentTest extends TestCase
         $this->assertEquals($subsegment, $serialised['subsegments'][0]);
     }
 
+    public function testAddingSubsegmentToClosedSegmentFails()
+    {
+        $segment = new Segment();
+        $subsegment = new Segment();
+
+        $subsegment->setName('Test subsegment')
+            ->begin()
+            ->end();
+
+        $segment->setName('Test segment')
+            ->setParentId('123')
+            ->begin()
+            ->end()
+            ->addSubsegment($subsegment);
+
+        $serialised = $segment->jsonSerialize();
+
+        $this->assertArrayNotHasKey('subsegments', $serialised);
+    }
+
     public function testIsNotOpenIfEndTimeSet()
     {
         $segment = new Segment();
@@ -146,5 +166,36 @@ class SegmentTest extends TestCase
         $segment->setSampled(false)
             ->submit($submitter);
 
+    }
+
+    public function testGivenNoSubsegmentsCurrentSegmentReturnsSegment()
+    {
+        $segment = new Segment();
+        $segment->begin();
+
+        $this->assertEquals($segment, $segment->getCurrentSegment());
+    }
+
+    public function testClosedSubsegmentCurrentSegmentReturnsSegment()
+    {
+        $subsegment = new Segment();
+        $subsegment->begin()
+            ->end();
+        $segment = new Segment();
+        $segment->begin()
+            ->addSubsegment($subsegment);
+
+        $this->assertEquals($segment, $segment->getCurrentSegment());
+    }
+
+    public function testOpenSubsegmentCurrentSegmentReturnsSubsegment()
+    {
+        $subsegment = new Segment();
+        $subsegment->begin();
+        $segment = new Segment();
+        $segment->begin()
+            ->addSubsegment($subsegment);
+
+        $this->assertEquals($subsegment, $segment->getCurrentSegment());
     }
 }
