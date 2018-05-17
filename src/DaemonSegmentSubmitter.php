@@ -9,10 +9,16 @@ namespace Pkerrigan\Xray;
  */
 class DaemonSegmentSubmitter implements SegmentSubmitter
 {
+    const HEADER = [
+        'format' => 'json',
+        'version' => 1
+    ];
+
     /**
      * @var string
      */
     private $host;
+
     /**
      * @var int
      */
@@ -26,12 +32,7 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
 
     public function submitSegment(Segment $segment)
     {
-        $header = [
-            'format' => 'json',
-            'version' => 1
-        ];
-
-        $packet = implode("\n", array_map('json_encode', [$header, $segment]));
+        $packet = implode("\n", array_map('json_encode', [self::HEADER, $segment]));
 
         $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
         socket_sendto($socket, $packet, strlen($packet), 0, $this->host, $this->port);

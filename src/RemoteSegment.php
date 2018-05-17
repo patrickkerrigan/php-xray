@@ -32,6 +32,6 @@ class RemoteSegment extends Segment
         $data['namespace'] = 'remote';
         $data['traced'] = $this->traced;
 
-        return $data;
+        return array_filter($data);
     }
 }
