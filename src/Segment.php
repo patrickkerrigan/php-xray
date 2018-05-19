@@ -14,6 +14,7 @@ class Segment implements JsonSerializable
 {
     /**
      * @var string
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     protected $id;
     /**
