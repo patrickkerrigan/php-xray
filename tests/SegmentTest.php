@@ -120,6 +120,25 @@ class SegmentTest extends TestCase
         $this->assertArrayNotHasKey('subsegments', $serialised);
     }
 
+    public function testAddingSubsegmentSetsSampled()
+    {
+        $segment = new Segment();
+        $subsegment = new Segment();
+
+        $subsegment->setName('Test subsegment')
+            ->begin()
+            ->end();
+
+        $segment->setName('Test segment')
+            ->setParentId('123')
+            ->setSampled(true)
+            ->begin()
+            ->addSubsegment($subsegment)
+            ->end();
+
+        $this->assertTrue($subsegment->isSampled());
+    }
+
     public function testIsNotOpenIfEndTimeSet()
     {
         $segment = new Segment();
