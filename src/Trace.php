@@ -77,6 +77,14 @@ class Trace extends Segment
     }
 
     /**
+     * @return string
+     */
+    public function getTraceId(): string
+    {
+        return $this->traceId;
+    }
+
+    /**
      * @inheritdoc
      */
     public function jsonSerialize()
@@ -95,13 +103,5 @@ class Trace extends Segment
         $uuid = bin2hex(random_bytes(12));
 
         $this->traceId = "1-{$startHex}-{$uuid}";
-    }
-
-    /**
-     * @return string
-     */
-    public function getTraceId(): string
-    {
-        return $this->traceId;
     }
 }

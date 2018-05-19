@@ -3,6 +3,7 @@
 namespace Pkerrigan\Xray;
 
 use JsonSerializable;
+use Pkerrigan\Xray\Submission\SegmentSubmitter;
 
 /**
  *
@@ -135,23 +136,6 @@ class Segment implements JsonSerializable
     }
 
     /**
-     * @inheritdoc
-     */
-    public function jsonSerialize()
-    {
-        return array_filter([
-            'id' => $this->id,
-            'parent_id' => $this->parentId,
-            'name' => $this->name ?? null,
-            'start_time' => $this->startTime,
-            'end_time' => $this->endTime,
-            'subsegments' => empty($this->subsegments) ? null : $this->subsegments,
-            'fault' => $this->fault,
-            'error' => $this->error
-        ]);
-    }
-
-    /**
      * @return bool
      */
     public function isSampled(): bool
@@ -189,11 +173,17 @@ class Segment implements JsonSerializable
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function isOpen(): bool
     {
         return !is_null($this->startTime) && is_null($this->endTime);
     }
 
+    /**
+     * @return Segment
+     */
     public function getCurrentSegment(): Segment
     {
         foreach ($this->subsegments as $subsegment) {
@@ -203,5 +193,22 @@ class Segment implements JsonSerializable
         }
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return array_filter([
+            'id' => $this->id,
+            'parent_id' => $this->parentId,
+            'name' => $this->name ?? null,
+            'start_time' => $this->startTime,
+            'end_time' => $this->endTime,
+            'subsegments' => empty($this->subsegments) ? null : $this->subsegments,
+            'fault' => $this->fault,
+            'error' => $this->error
+        ]);
     }
 }

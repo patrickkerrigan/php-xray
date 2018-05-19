@@ -3,6 +3,7 @@
 namespace Pkerrigan\Xray;
 
 use PHPUnit\Framework\TestCase;
+use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
 
 /**
  *

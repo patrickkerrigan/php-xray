@@ -1,6 +1,8 @@
 <?php
 
-namespace Pkerrigan\Xray;
+namespace Pkerrigan\Xray\Submission;
+
+use Pkerrigan\Xray\Segment;
 
 /**
  *
@@ -30,6 +32,9 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
         $this->port = $port;
     }
 
+    /**
+     * @param Segment $segment
+     */
     public function submitSegment(Segment $segment)
     {
         $packet = implode("\n", array_map('json_encode', [self::HEADER, $segment]));

@@ -1,0 +1,23 @@
+ratings:
+  paths:
+    - "**.php"
+
+engines:
+  fixme:
+    enabled: true
+
+  duplication:
+    enabled: true
+    config:
+      languages:
+        - php
+
+  phpcodesniffer:
+    enabled: true
+    config:
+      standard: "PSR1,PSR2"
+
+  phpmd:
+    enabled: true
+    config:
+      rulesets: "codesize,naming,controversial"
