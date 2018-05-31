@@ -101,6 +101,24 @@ class SegmentTest extends TestCase
         $this->assertEquals($subsegment, $serialised['subsegments'][0]);
     }
 
+    public function testIndependentSubsegmentSerialisesCorrectly()
+    {
+        $segment = new Segment();
+
+        $segment->setName('Test segment')
+                ->setParentId('123')
+                ->setTraceId('456')
+                ->setIndependent(true)
+                ->begin()
+                ->end();
+
+        $serialised = $segment->jsonSerialize();
+
+        $this->assertEquals('123', $serialised['parent_id']);
+        $this->assertEquals('456', $serialised['trace_id']);
+        $this->assertEquals('subsegment', $serialised['type']);
+    }
+
     public function testAddingSubsegmentToClosedSegmentFails()
     {
         $segment = new Segment();

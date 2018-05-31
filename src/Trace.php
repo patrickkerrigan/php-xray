@@ -17,11 +17,6 @@ class Trace extends Segment
     private static $instance;
 
     /**
-     * @var string
-     */
-    protected $traceId;
-
-    /**
      * @return static
      */
     public static function getInstance()
@@ -51,7 +46,9 @@ class Trace extends Segment
 
         $variables = array_column($variables, 1, 0);
 
-        $this->traceId = $variables['Root'] ?? null;
+        if (isset($variables['Root'])) {
+            $this->setTraceId($variables['Root']);
+        }
         $this->setSampled($variables['Sampled'] ?? false);
         $this->setParentId($variables['Parent'] ?? null);
 
@@ -77,21 +74,12 @@ class Trace extends Segment
     }
 
     /**
-     * @return string
-     */
-    public function getTraceId(): string
-    {
-        return $this->traceId;
-    }
-
-    /**
      * @inheritdoc
      */
     public function jsonSerialize()
     {
         $data = parent::jsonSerialize();
 
-        $data['trace_id'] = $this->traceId;
         $data['http'] = $this->serialiseHttpData();
 
         return array_filter($data);
@@ -102,6 +90,6 @@ class Trace extends Segment
         $startHex = dechex((int)$this->startTime);
         $uuid = bin2hex(random_bytes(12));
 
-        $this->traceId = "1-{$startHex}-{$uuid}";
+        $this->setTraceId("1-{$startHex}-{$uuid}");
     }
 }
