@@ -72,7 +72,7 @@ class DaemonSegmentSubmitterTest extends TestCase
         $openingSegment['in_progress'] = true;
 
         $expectedPackets = [$openingSegment, $subsegment1, $subsegment2, $subsegment3, $rawSegment];
-        
+
         $this->assertPacketsReceived($expectedPackets, $buffer);
     }
 
@@ -102,7 +102,6 @@ class DaemonSegmentSubmitterTest extends TestCase
 
         for ($i = 0; $i < $number; $i++) {
             socket_recvfrom($this->socket, $buffer[$i], 65535, 0, $from, $port);
-            var_dump($buffer[$i]);
         }
 
         return $buffer;
