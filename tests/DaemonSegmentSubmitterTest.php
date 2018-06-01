@@ -12,11 +12,26 @@ use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
  */
 class DaemonSegmentSubmitterTest extends TestCase
 {
+    /**
+     * @var resource
+     */
+    private $socket;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+        socket_bind($this->socket, '127.0.0.1', 2000);
+    }
+
+    public function tearDown()
+    {
+        socket_close($this->socket);
+        parent::tearDown();
+    }
+
     public function testSubmitsToDaemon()
     {
-        $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
-        socket_bind($socket, '127.0.0.1', 2000);
-
         $segment = new Segment();
         $segment->setSampled(true)
             ->setName('Test segment')
@@ -24,14 +39,83 @@ class DaemonSegmentSubmitterTest extends TestCase
             ->end()
             ->submit(new DaemonSegmentSubmitter());
 
+        $packets = $this->receivePackets(1);
+
+        $this->assertPacketsReceived([$segment], $packets);
+    }
+
+    public function testSubmitsLongTraceAsFragmented()
+    {
+        $subsegment1 = (new SqlSegment())
+            ->setQuery(str_repeat('a', 30000));
+        $subsegment2 = (new SqlSegment())
+            ->setQuery(str_repeat('b', 30000));
+        $subsegment3 = (new SqlSegment())
+            ->setQuery(str_repeat('c', 30000));
+
+        $segment = new Trace();
+        $segment->setSampled(true)
+                ->setName('Test segment')
+                ->begin()
+                ->addSubsegment($subsegment1)
+                ->addSubsegment($subsegment2)
+                ->addSubsegment($subsegment3)
+                ->end()
+                ->submit(new DaemonSegmentSubmitter());
+
+        $buffer = $this->receivePackets(5);
+
+        $rawSegment = $segment->jsonSerialize();
+        unset($rawSegment['subsegments']);
+        $openingSegment = $rawSegment;
+        unset($openingSegment['end_time']);
+        $openingSegment['in_progress'] = true;
+
+        $subsegment1->setIndependent(true)
+                    ->setTraceId($segment->getTraceId())
+                    ->setParentId($segment->getId());
+
+        $subsegment2->setIndependent(true)
+                    ->setTraceId($segment->getTraceId())
+                    ->setParentId($segment->getId());
+
+        $subsegment3->setIndependent(true)
+                    ->setTraceId($segment->getTraceId())
+                    ->setParentId($segment->getId());
+
+        $expectedPackets = [$openingSegment, $subsegment1, $subsegment2, $subsegment3, $rawSegment];
+
+        $this->assertPacketsReceived($expectedPackets, $buffer);
+    }
+
+    /**
+     * @param $expectedPackets
+     * @param $buffer
+     */
+    private function assertPacketsReceived($expectedPackets, $buffer)
+    {
+        for ($i = 0; $i < count($expectedPackets); $i++) {
+            $this->assertEquals(
+                json_encode(DaemonSegmentSubmitter::HEADER) . "\n" . json_encode($expectedPackets[$i]),
+                $buffer[$i]
+            );
+        }
+    }
+
+    /**
+     * @param int $number
+     * @return array
+     */
+    private function receivePackets(int $number): array
+    {
         $from = '';
         $port = 0;
-        socket_recvfrom($socket, $buffer, 512, 0, $from, $port);
-        socket_close($socket);
+        $buffer = array_fill(0, $number, '');
 
-        $this->assertEquals(
-            json_encode(DaemonSegmentSubmitter::HEADER) . "\n" . json_encode($segment),
-            $buffer
-        );
+        for ($i = 0; $i < $number; $i++) {
+            socket_recvfrom($this->socket, $buffer[$i], 65535, 0, $from, $port);
+        }
+
+        return $buffer;
     }
 }

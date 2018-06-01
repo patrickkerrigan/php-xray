@@ -22,6 +22,10 @@ class Segment implements JsonSerializable
      */
     protected $parentId;
     /**
+     * @var string
+     */
+    protected $traceId;
+    /**
      * @var string|null
      */
     protected $name;
@@ -49,6 +53,10 @@ class Segment implements JsonSerializable
      * @var bool
      */
     protected $sampled = false;
+    /**
+     * @var bool
+     */
+    protected $independent = false;
 
     public function __construct()
     {
@@ -175,11 +183,41 @@ class Segment implements JsonSerializable
     }
 
     /**
+     * @param string $traceId
+     * @return static
+     */
+    public function setTraceId(string $traceId)
+    {
+        $this->traceId = $traceId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTraceId(): string
+    {
+        return $this->traceId;
+    }
+
+    /**
      * @return bool
      */
     public function isOpen(): bool
     {
         return !is_null($this->startTime) && is_null($this->endTime);
+    }
+
+    /**
+     * @param bool $independent
+     * @return static
+     */
+    public function setIndependent(bool $independent)
+    {
+        $this->independent = $independent;
+
+        return $this;
     }
 
     /**
@@ -204,10 +242,12 @@ class Segment implements JsonSerializable
         return array_filter([
             'id' => $this->id,
             'parent_id' => $this->parentId,
+            'trace_id' => $this->traceId,
             'name' => $this->name ?? null,
             'start_time' => $this->startTime,
             'end_time' => $this->endTime,
             'subsegments' => empty($this->subsegments) ? null : $this->subsegments,
+            'type' => $this->independent ? 'subsegment' : null,
             'fault' => $this->fault,
             'error' => $this->error
         ]);
