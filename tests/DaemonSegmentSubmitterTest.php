@@ -71,6 +71,18 @@ class DaemonSegmentSubmitterTest extends TestCase
         unset($openingSegment['end_time']);
         $openingSegment['in_progress'] = true;
 
+        $subsegment1->setIndependent(true)
+                    ->setTraceId($segment->getTraceId())
+                    ->setParentId($segment->getId());
+
+        $subsegment2->setIndependent(true)
+                    ->setTraceId($segment->getTraceId())
+                    ->setParentId($segment->getId());
+
+        $subsegment3->setIndependent(true)
+                    ->setTraceId($segment->getTraceId())
+                    ->setParentId($segment->getId());
+
         $expectedPackets = [$openingSegment, $subsegment1, $subsegment2, $subsegment3, $rawSegment];
 
         $this->assertPacketsReceived($expectedPackets, $buffer);
