@@ -93,6 +93,7 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
         $this->submitOpenSegment($rawSegment);
 
         foreach ($subsegments as $subsegment) {
+            $subsegment = clone $subsegment;
             $subsegment->setParentId($segment->getId())
                        ->setTraceId($segment->getTraceId())
                        ->setIndependent(true);
