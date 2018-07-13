@@ -1,0 +1,15 @@
+# Changelog
+
+## [1.0.2] - 2018-07-13
+### Added
+- A client's IP address and user agent can be recorded on traces
+- User identifiers can be recorded on traces
+- Annotations and metadata can be added to subsegments and traces
+
+## [1.0.1] - 2018-06-01
+### Added
+- Traces larger than a single UDP packet will now be fragmented rather than dropped
+
+## [1.0.0] - 2018-05-19
+### Added
+- Initial release
