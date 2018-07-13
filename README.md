@@ -73,6 +73,5 @@ Trace::getInstance()
 
 ## Features not yet implemented
 
-* Sending user info such as IP address and User Agent with a trace
 * Exception and stack trace support
 * Submission of incomplete segments
