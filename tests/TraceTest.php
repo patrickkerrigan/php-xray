@@ -25,6 +25,8 @@ class TraceTest extends TestCase
         $trace->setName('Test trace')
             ->setUrl('http://example.com')
             ->setMethod('GET')
+            ->setClientIpAddress('127.0.0.1')
+            ->setUserAgent('TestAgent')
             ->setResponseCode(200)
             ->begin()
             ->end();
@@ -34,6 +36,8 @@ class TraceTest extends TestCase
         $this->assertEquals('Test trace', $serialised['name']);
         $this->assertEquals('http://example.com', $serialised['http']['request']['url']);
         $this->assertEquals('GET', $serialised['http']['request']['method']);
+        $this->assertEquals('127.0.0.1', $serialised['http']['request']['client_ip']);
+        $this->assertEquals('TestAgent', $serialised['http']['request']['user_agent']);
         $this->assertEquals(200, $serialised['http']['response']['status']);
         $this->assertEquals($trace->getTraceId(), $serialised['trace_id']);
     }

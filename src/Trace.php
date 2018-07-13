@@ -56,6 +56,28 @@ class Trace extends Segment
     }
 
     /**
+     * @param string $clientIpAddress
+     * @return static
+     */
+    public function setClientIpAddress(string $clientIpAddress)
+    {
+        $this->clientIpAddress = $clientIpAddress;
+
+        return $this;
+    }
+
+    /**
+     * @param string $userAgent
+     * @return static
+     */
+    public function setUserAgent(string $userAgent)
+    {
+        $this->userAgent = $userAgent;
+
+        return $this;
+    }
+
+    /**
      * @inheritdoc
      */
     public function begin(int $samplePercentage = 10)
