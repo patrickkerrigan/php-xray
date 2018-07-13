@@ -57,6 +57,14 @@ class Segment implements JsonSerializable
      * @var bool
      */
     protected $independent = false;
+    /**
+     * @var string[]
+     */
+    private $annotations;
+    /**
+     * @var string[]
+     */
+    private $metadata;
 
     public function __construct()
     {
@@ -221,6 +229,30 @@ class Segment implements JsonSerializable
     }
 
     /**
+     * @param string $key
+     * @param string $value
+     * @return static
+     */
+    public function addAnnotation(string $key, string $value)
+    {
+        $this->annotations[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @param $value
+     * @return static
+     */
+    public function addMetadata(string $key, $value)
+    {
+        $this->metadata[$key] = $value;
+
+        return $this;
+    }
+
+    /**
      * @return Segment
      */
     public function getCurrentSegment(): Segment
@@ -249,7 +281,9 @@ class Segment implements JsonSerializable
             'subsegments' => empty($this->subsegments) ? null : $this->subsegments,
             'type' => $this->independent ? 'subsegment' : null,
             'fault' => $this->fault,
-            'error' => $this->error
+            'error' => $this->error,
+            'annotations' => empty($this->annotations) ? null : $this->annotations,
+            'metadata' => empty($this->metadata) ? null : $this->metadata
         ]);
     }
 }

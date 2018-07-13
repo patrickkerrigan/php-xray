@@ -119,6 +119,40 @@ class SegmentTest extends TestCase
         $this->assertEquals('subsegment', $serialised['type']);
     }
 
+    public function testGivenAnnotationsSerialisesCorrectly()
+    {
+        $segment = new Segment();
+        $segment->addAnnotation('key1', 'value1')
+            ->addAnnotation('key2', 'value2');
+
+        $serialised = $segment->jsonSerialize();
+
+        $this->assertEquals(
+            [
+                'key1' => 'value1',
+                'key2' => 'value2'
+            ],
+            $serialised['annotations']
+        );
+    }
+
+    public function testGivenMetadataSerialisesCorrectly()
+    {
+        $segment = new Segment();
+        $segment->addMetadata('key1', 'value1')
+            ->addMetadata('key2', ['value2', 'value3']);
+
+        $serialised = $segment->jsonSerialize();
+
+        $this->assertEquals(
+            [
+                'key1' => 'value1',
+                'key2' => ['value2', 'value3']
+            ],
+            $serialised['metadata']
+        );
+    }
+
     public function testAddingSubsegmentToClosedSegmentFails()
     {
         $segment = new Segment();
