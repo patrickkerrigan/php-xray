@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.2] - 2018-07-13
+## [1.1.0] - 2018-07-13
 ### Added
 - A service's version can be recorded on traces
 - A client's IP address and user agent can be recorded on traces
