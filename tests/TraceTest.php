@@ -23,6 +23,8 @@ class TraceTest extends TestCase
     {
         $trace = new Trace();
         $trace->setName('Test trace')
+            ->setServiceVersion('1.2.3')
+            ->setUser('TestUser')
             ->setUrl('http://example.com')
             ->setMethod('GET')
             ->setClientIpAddress('127.0.0.1')
@@ -34,6 +36,8 @@ class TraceTest extends TestCase
         $serialised = $trace->jsonSerialize();
 
         $this->assertEquals('Test trace', $serialised['name']);
+        $this->assertEquals('1.2.3', $serialised['service']['version']);
+        $this->assertEquals('TestUser', $serialised['user']);
         $this->assertEquals('http://example.com', $serialised['http']['request']['url']);
         $this->assertEquals('GET', $serialised['http']['request']['method']);
         $this->assertEquals('127.0.0.1', $serialised['http']['request']['client_ip']);

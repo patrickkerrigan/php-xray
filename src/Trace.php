@@ -15,6 +15,14 @@ class Trace extends Segment
      * @var static
      */
     private static $instance;
+    /**
+     * @var string
+     */
+    private $serviceVersion;
+    /**
+     * @var string
+     */
+    private $user;
 
     /**
      * @return static
@@ -51,6 +59,28 @@ class Trace extends Segment
         }
         $this->setSampled($variables['Sampled'] ?? false);
         $this->setParentId($variables['Parent'] ?? null);
+
+        return $this;
+    }
+
+    /**
+     * @param string $serviceVersion
+     * @return static
+     */
+    public function setServiceVersion(string $serviceVersion)
+    {
+        $this->serviceVersion = $serviceVersion;
+
+        return $this;
+    }
+
+    /**
+     * @param string $user
+     * @return static
+     */
+    public function setUser(string $user)
+    {
+        $this->user = $user;
 
         return $this;
     }
@@ -103,6 +133,8 @@ class Trace extends Segment
         $data = parent::jsonSerialize();
 
         $data['http'] = $this->serialiseHttpData();
+        $data['service'] = empty($this->serviceVersion) ? null : ['version' => $this->serviceVersion];
+        $data['user'] = $this->user;
 
         return array_filter($data);
     }
