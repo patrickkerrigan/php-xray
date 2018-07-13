@@ -2,6 +2,7 @@
 
 ## [1.0.2] - 2018-07-13
 ### Added
+- A service's version can be recorded on traces
 - A client's IP address and user agent can be recorded on traces
 - User identifiers can be recorded on traces
 - Annotations and metadata can be added to subsegments and traces
