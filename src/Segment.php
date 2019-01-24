@@ -65,6 +65,10 @@ class Segment implements JsonSerializable
      * @var string[]
      */
     private $metadata;
+    /**
+     * @var int
+     */
+    private $lastOpenSegment = 0;
 
     public function __construct()
     {
@@ -257,9 +261,9 @@ class Segment implements JsonSerializable
      */
     public function getCurrentSegment(): Segment
     {
-        foreach ($this->subsegments as $subsegment) {
-            if ($subsegment->isOpen()) {
-                return $subsegment->getCurrentSegment();
+        for ($max = count($this->subsegments); $this->lastOpenSegment < $max; $this->lastOpenSegment++) {
+            if ($this->subsegments[$this->lastOpenSegment]->isOpen()) {
+                return $this->subsegments[$this->lastOpenSegment]->getCurrentSegment();
             }
         }
 
