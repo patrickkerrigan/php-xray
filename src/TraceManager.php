@@ -1,15 +1,15 @@
 <?php
 namespace Pkerrigan\Xray;
 
-use Pkerrigan\Xray\SamplingRule\SamplingRule;
+use Pkerrigan\Xray\SamplingRule\SamplingRuleRepository;
 use Pkerrigan\Xray\Submission\SegmentSubmitter;
 use Psr\Http\Message\ServerRequestInterface;
 
 class TraceManager
 {
 
-    /** @var SamplingRule */
-    private $samplingRule;
+    /** @var SamplingRuleRepository */
+    private $samplingRuleRepository;
 
     /** @var RequestMatcher */
     private $requestMatcher;
@@ -18,11 +18,11 @@ class TraceManager
     private $segmentSubmitter;
 
     public function __construct(
-        SamplingRule $samplingRule,
+        SamplingRuleRepository $samplingRule,
         RequestMatcher $requestMatcher,
         SegmentSubmitter $segmentSubmitter)
     {
-        $this->samplingRule = $samplingRule;
+        $this->samplingRuleRepository = $samplingRule;
         $this->requestMatcher = $requestMatcher;
         $this->segmentSubmitter = $segmentSubmitter;
     }
@@ -31,7 +31,7 @@ class TraceManager
         ServerRequestInterface $request,
         Trace $trace): void
     {
-        $samplingRules = $this->samplingRule->fetch();
+        $samplingRules = $this->samplingRuleRepository->getAll();
         $samplingRule = $this->requestMatcher->matches($request, $samplingRules);
         $trace->setSampled($samplingRule !== null && (random_int(0, 99) < $samplingRule["FixedRate"] * 100));
         
