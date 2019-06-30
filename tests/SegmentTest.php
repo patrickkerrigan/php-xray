@@ -2,7 +2,6 @@
 
 namespace Pkerrigan\Xray;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Pkerrigan\Xray\Submission\SegmentSubmitter;
 
