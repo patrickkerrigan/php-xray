@@ -105,6 +105,22 @@ class Segment implements JsonSerializable
 
         return $this;
     }
+    
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+    
+    /**
+     * @return string|null
+     */
+    public function getType()
+    {
+        return $this->independent ? 'subsegment' : null;
+    }
 
     /**
      * @param bool $error
@@ -283,7 +299,7 @@ class Segment implements JsonSerializable
             'start_time' => $this->startTime,
             'end_time' => $this->endTime,
             'subsegments' => empty($this->subsegments) ? null : $this->subsegments,
-            'type' => $this->independent ? 'subsegment' : null,
+            'type' => $this->getType(),
             'fault' => $this->fault,
             'error' => $this->error,
             'annotations' => empty($this->annotations) ? null : $this->annotations,

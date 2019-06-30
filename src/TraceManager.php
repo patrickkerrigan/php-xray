@@ -3,7 +3,6 @@ namespace Pkerrigan\Xray;
 
 use Pkerrigan\Xray\SamplingRule\SamplingRuleRepository;
 use Pkerrigan\Xray\Submission\SegmentSubmitter;
-use Psr\Http\Message\ServerRequestInterface;
 
 class TraceManager
 {
@@ -11,30 +10,33 @@ class TraceManager
     /** @var SamplingRuleRepository */
     private $samplingRuleRepository;
 
-    /** @var RequestMatcher */
-    private $requestMatcher;
+    /** @var SamplingRuleMatcher */
+    private $samplingRuleMatcher;
 
     /** @var SegmentSubmitter */
     private $segmentSubmitter;
 
     public function __construct(
-        SamplingRuleRepository $samplingRule,
-        RequestMatcher $requestMatcher,
-        SegmentSubmitter $segmentSubmitter)
+        SamplingRuleRepository $samplingRuleRepository, 
+        SegmentSubmitter $segmentSubmitter,
+        ?SamplingRuleMatcher $samplingRuleMatcher = null
+    )
     {
-        $this->samplingRuleRepository = $samplingRule;
-        $this->requestMatcher = $requestMatcher;
+        $this->samplingRuleRepository = $samplingRuleRepository;
         $this->segmentSubmitter = $segmentSubmitter;
+        $this->samplingRuleMatcher = $samplingRuleMatcher ?? new SamplingRuleMatcher();
     }
 
-    public function submit(
-        ServerRequestInterface $request,
-        Trace $trace): void
+    public function submit(Trace $trace): void
     {
-        $samplingRules = $this->samplingRuleRepository->getAll();
-        $samplingRule = $this->requestMatcher->matches($request, $samplingRules);
-        $trace->setSampled($samplingRule !== null && (random_int(0, 99) < $samplingRule["FixedRate"] * 100));
+        $samplingRules = $this->samplingRuleRepository->getAll([
+            "serviceName" => $trace->getName(),
+            "serviceType" => $trace->getType()
+        ]);
         
+        $samplingRule = $this->samplingRuleMatcher->matchAny($trace, $samplingRules);
+        $trace->setSampled($samplingRule !== null && (random_int(0, 99) < $samplingRule["FixedRate"] * 100));
+
         $trace->submit($this->segmentSubmitter);
     }
 }

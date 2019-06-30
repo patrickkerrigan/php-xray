@@ -30,5 +30,14 @@ class Utils
         
         return preg_match("/^{$criteria}$/i", $input) === 1;
     }
+    
+    public static function sortSamplingRulesByPriorityDescending(array $samplingRules): array
+    {
+        usort($samplingRules, function($samplingRule, $samplingRuleOther) {
+            return $samplingRule["Priority"] - $samplingRuleOther["Priority"];
+        });
+        
+        return $samplingRules;
+    }
 }
 

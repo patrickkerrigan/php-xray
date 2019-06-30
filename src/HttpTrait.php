@@ -40,6 +40,14 @@ trait HttpTrait
 
         return $this;
     }
+    
+    /**
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
 
     /**
      * @param string $method
@@ -50,6 +58,14 @@ trait HttpTrait
         $this->method = $method;
 
         return $this;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getMethod(): string
+    {
+        return $this->method;
     }
 
     /**
