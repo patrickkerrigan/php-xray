@@ -5,17 +5,10 @@ namespace Pkerrigan\Xray;
  *
  * @author Niklas Ekman <nikl.ekman@gmail.com>
  * @since 01/07/2019
+ * @see https://docs.aws.amazon.com/xray/latest/devguide/xray-console-sampling.html
  */
 class SamplingRuleMatcher
 {
-
-    /**
-     * Find the first sampling rule that matches the trace
-     * 
-     * @param Trace $trace
-     * @param array $samplingRules
-     * @return array|null
-     */
     final public function matchFirst(Trace $trace, array $samplingRules)
     {
         $samplingRules = Utils::sortSamplingRulesByPriorityDescending($samplingRules);
@@ -32,10 +25,22 @@ class SamplingRuleMatcher
     public function match(Trace $trace, array $samplingRule): bool
     {
         $url = parse_url($trace->getUrl());
+        
+        $criterias = [
+            $samplingRule["ServiceName"] => $trace->getName() ?? '',
+            $samplingRule["ServiceType"] => $trace->getType() ?? '',
+            $samplingRule["HTTPMethod"] => $trace->getMethod(),
+            $samplingRule["URLPath"] => $url['path'] ?? '',
+            $samplingRule["Host"] => $url['host'] ?? ''
+        ];
 
-        return Utils::matchesCriteria($samplingRule["HTTPMethod"], $trace->getMethod())
-            && Utils::matchesCriteria($samplingRule["URLPath"], $url['path'] ?? "")
-            && Utils::matchesCriteria($samplingRule["Host"], $url['host'] ?? "");
+        foreach ($criterias as $criteria => $input) {
+            if (! Utils::matchesCriteria($criteria, $input)) {
+                return false;
+            }
+        }
+        
+        return true;
     }
 }
 

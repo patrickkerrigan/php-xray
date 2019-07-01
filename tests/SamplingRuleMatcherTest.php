@@ -26,24 +26,27 @@ class SamplingRuleMatcherTest extends TestCase
             [
                 (new Trace())
                     ->setUrl("https://example.com/path")
-                    ->setMethod("GET"),
+                    ->setMethod("GET")
+                    ->setName("application"),
                 [
                     "HTTPMethod" => "GET",
                     "Host" => "example.com",
-                    "URLPath" => "/path"
+                    "URLPath" => "/path",
+                    "ServiceName" => "app*",
+                    "ServiceType" => "*"
                 ],
                 true
             ]            
         ];
     }
     
-    /** @dataProvider provideMatchAny */
-    public function testMatchAny($trace, $samplingRules, $expected)
+    /** @dataProvider provideMatchFirst */
+    public function testMatchFirst($trace, $samplingRules, $expected)
     {
-        $this->assertEquals($expected, $this->samplingRuleMatcher->matchAny($trace, $samplingRules));
+        $this->assertEquals($expected, $this->samplingRuleMatcher->matchFirst($trace, $samplingRules));
     }
     
-    public function provideMatchAny()
+    public function provideMatchFirst()
     {
         return [
             [
@@ -56,21 +59,27 @@ class SamplingRuleMatcherTest extends TestCase
                         "HTTPMethod" => "GET",
                         "Host" => "example.com",
                         "URLPath" => "/path",
-                        "RuleName" => "Default"
+                        "RuleName" => "Default",
+                        "ServiceName" => "*",
+                        "ServiceType" => "*"
                     ],
                     [
                         "Priority" => 1,
                         "HTTPMethod" => "GET",
                         "Host" => "*",
                         "URLPath" => "/any/path",
-                        "RuleName" => "Not matching"
+                        "RuleName" => "Not matching",
+                        "ServiceName" => "*",
+                        "ServiceType" => "*"
                     ],
                     [
                         "Priority" => 5,
                         "HTTPMethod" => "GET",
                         "Host" => "*",
                         "URLPath" => "/path",
-                        "RuleName" => "Important"
+                        "RuleName" => "Important",
+                        "ServiceName" => "*",
+                        "ServiceType" => "*"
                     ]
                 ],
                 [
@@ -78,7 +87,9 @@ class SamplingRuleMatcherTest extends TestCase
                     "HTTPMethod" => "GET",
                     "Host" => "*",
                     "URLPath" => "/path",
-                    "RuleName" => "Important"
+                    "RuleName" => "Important",
+                    "ServiceName" => "*",
+                    "ServiceType" => "*"
                 ]
             ]
         ];

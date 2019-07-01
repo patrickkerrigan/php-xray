@@ -17,9 +17,30 @@ $ composer require pkerrigan/xray ^1.2
 
 ## Usage
 
+### Creating a trace service
+
+The `TraceService` is a facade that takes care of downloading sampling rules from the AWS console and submitting traces based on the rules you've setup. The library will need to know how to download the sampling rules. Please refer to the [AWS SDK for PHP documentation](https://aws.amazon.com/sdk-for-php/) on how to create and configure a `\Aws\XRay\XRayClient`:
+
+```php
+$xrayClient = new \Aws\XRay\XRayClient($config);
+$samplingRuleRepository = new AwsSdkSamplingRuleRepository($xrayClient);
+```
+
+Applications will most likely need to download this information very often, so it is recommended (but optional) to cache it. You will need to provide any PSR compliant cache implementation and, since there are [plenty of other libraries](https://packagist.org/providers/psr/simple-cache-implementation) focusing on that, you will have to install and configure your preferred caching implementation yourself. Then wrap the sampling rule repository in a cache implementation:
+
+```php
+$cachedSamplingRuleRepository = new CachedSamplingRuleRepository($samplingRuleRepository, $psrCacheImplementation);
+```
+
+Lastly, create the `TraceService`. By default only submitting via the AWS X-Ray daemon is supported:
+
+```php
+$traceService = new TraceService($samplingRuleRepository, new DaemonSegmentSubmitter());
+```
+
 ### Starting a trace
 
-The ```Trace``` class represents the top-level of an AWS X-Ray trace, and can function as a singleton for easy access from anywhere in your code, including before frameworks and dependency injectors have been initialised.
+The `Trace` class represents the top-level of an AWS X-Ray trace, and can function as a singleton for easy access from anywhere in your code, including before frameworks and dependency injectors have been initialised.
 
 You should start a trace as early as possible in your request:
 
@@ -58,20 +79,22 @@ Trace::getInstance()
     
 ```
 
-The ```getCurrentSegment()``` method will always return the most recently opened segment, allowing you to nest as deeply as necessary.
+The `getCurrentSegment()` method will always return the most recently opened segment, allowing you to nest as deeply as necessary.
 
 ### Ending a trace
 
-At the end of your request, you'll want to end and submit your trace. By default only submitting via the AWS X-Ray daemon is supported.
+At the end of your request, you'll want to end and submit your trace.
 
 ```php
 Trace::getInstance()
     ->end()
-    ->setResponseCode(http_response_code())
-    ->submit(new DaemonSegmentSubmitter());
+    ->setResponseCode(http_response_code());
+
+$traceService->submitTrace(Trace::getInstance());
 ```
 
 ## Features not yet implemented
 
 * Exception and stack trace support
 * Submission of incomplete segments
+* Sampling rule reservoir size
