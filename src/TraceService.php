@@ -25,8 +25,8 @@ class TraceService
 
     public function __construct(
         SamplingRuleRepository $samplingRuleRepository, 
-        ?SegmentSubmitter $segmentSubmitter = null,
-        ?SamplingRuleMatcher $samplingRuleMatcher = null
+        SegmentSubmitter $segmentSubmitter = null,
+        SamplingRuleMatcher $samplingRuleMatcher = null
     )
     {
         $this->samplingRuleRepository = $samplingRuleRepository;

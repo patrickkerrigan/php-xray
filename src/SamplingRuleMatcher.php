@@ -9,7 +9,7 @@ namespace Pkerrigan\Xray;
  */
 class SamplingRuleMatcher
 {
-    final public function matchFirst(Trace $trace, array $samplingRules)
+    public function matchFirst(Trace $trace, array $samplingRules)
     {
         $samplingRules = Utils::sortSamplingRulesByPriorityDescending($samplingRules);
 
