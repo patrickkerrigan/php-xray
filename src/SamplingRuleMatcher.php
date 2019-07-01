@@ -1,10 +1,22 @@
 <?php
 namespace Pkerrigan\Xray;
 
+/**
+ *
+ * @author Niklas Ekman <nikl.ekman@gmail.com>
+ * @since 01/07/2019
+ */
 class SamplingRuleMatcher
 {
 
-    final public function matchAny(Trace $trace, array $samplingRules): ?array
+    /**
+     * Find the first sampling rule that matches the trace
+     * 
+     * @param Trace $trace
+     * @param array $samplingRules
+     * @return array|null
+     */
+    final public function matchFirst(Trace $trace, array $samplingRules)
     {
         $samplingRules = Utils::sortSamplingRulesByPriorityDescending($samplingRules);
 

@@ -12,7 +12,7 @@ use Psr\SimpleCache\CacheInterface;
 class CachedSamplingRuleRepository implements SamplingRuleRepository
 {
 
-    private const CACHE_KEY = "Pkerrigan\\Xray\\SamplingRule";
+    const CACHE_KEY = "Pkerrigan\\Xray\\SamplingRule";
 
     /** @var SamplingRuleRepository */
     private $samplingRuleRepository;
@@ -23,7 +23,11 @@ class CachedSamplingRuleRepository implements SamplingRuleRepository
     /** @var int */
     private $cacheTtlSeconds;
 
-    public function __construct(SamplingRuleRepository $samplingRuleRepository, CacheInterface $cache, int $cacheTtlSeconds = 3600)
+    public function __construct(
+        SamplingRuleRepository $samplingRuleRepository,
+        CacheInterface $cache,
+        int $cacheTtlSeconds = 3600
+    )
     {
         $this->samplingRuleRepository = $samplingRuleRepository;
         $this->cache = $cache;
