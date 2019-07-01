@@ -32,6 +32,11 @@ class UtilsTest extends TestCase
                 "Testo",
                 false
             ],
+            "Single-character wildcard (?)" => [
+                "T?st",
+                "Tst",
+                false
+            ],
             "Multi-character wildcard (*)" => [
                 "T*st",
                 "Test",

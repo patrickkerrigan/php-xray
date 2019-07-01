@@ -29,7 +29,7 @@ class AwsSdkSamplingRuleRepositoryTest extends TestCase
         $repository = new AwsSdkSamplingRuleRepository($xrayClient);
 
         $expected = [
-                [
+            [
                 "ServiceName" => "*",
                 "ServiceType" => "*"
             ]

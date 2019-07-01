@@ -34,16 +34,14 @@ class CachedSamplingRuleRepository implements SamplingRuleRepository
         $this->cacheTtlSeconds = $cacheTtlSeconds;
     }
 
-    public function getAll(array $filters = []): array
-    {
-        $cacheKey = self::CACHE_KEY . "\\" . implode("-", $filters);
-        
-        if ($this->cache->has($cacheKey)) {
-            return $this->cache->get($cacheKey);
+    public function getAll(): array
+    {        
+        if ($this->cache->has(self::CACHE_KEY)) {
+            return $this->cache->get(self::CACHE_KEY);
         }
 
         $samplingRules = $this->samplingRuleRepository->getAll();
-        $this->cache->set($cacheKey, $samplingRules, $this->cacheTtlSeconds);
+        $this->cache->set(self::CACHE_KEY, $samplingRules, $this->cacheTtlSeconds);
 
         return $samplingRules;
     }

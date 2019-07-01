@@ -119,7 +119,7 @@ class Trace extends Segment
         }
 
         if (!$this->isSampled()) {
-            $this->sampled = (random_int(0, 99) < $samplePercentage);
+            $this->sampled = Utils::randomPossibility($samplePercentage);
         }
 
         return $this;

@@ -36,13 +36,10 @@ class TraceService
 
     public function submitTrace(Trace $trace)
     {
-        $samplingRules = $this->samplingRuleRepository->getAll([
-            "serviceName" => $trace->getName(),
-            "serviceType" => $trace->getType()
-        ]);
-        
+        $samplingRules = $this->samplingRuleRepository->getAll();
         $samplingRule = $this->samplingRuleMatcher->matchFirst($trace, $samplingRules);
-        $isSampled = $samplingRule !== null && (random_int(0, 99) < $samplingRule["FixedRate"] * 100);
+        
+        $isSampled = $samplingRule !== null && Utils::randomPossibility($samplingRule["FixedRate"] * 100);
         $trace->setSampled($isSampled);
 
         if ($isSampled) {
