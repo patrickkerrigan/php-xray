@@ -23,7 +23,7 @@ class SamplingRuleBuilderTest extends TestCase
             'ReservoirSize' => 1,
             'ResourceARN' => '*',
             'RuleARN' => '*',
-            'RuleName' => __NAMESPACE__,
+            'RuleName' => 'Pkerrigan\\Xray\\SamplingRule',
             'ServiceName' => 'app.example.com',
             'ServiceType' => '*',
             'URLPath' => '/my/path'
@@ -50,7 +50,7 @@ class SamplingRuleBuilderTest extends TestCase
             'ReservoirSize' => 1,
             'ResourceARN' => '*',
             'RuleARN' => '*',
-            'RuleName' => __NAMESPACE__,
+            'RuleName' => 'Pkerrigan\\Xray\\SamplingRule',
             'ServiceName' => 'app.example.com',
             'ServiceType' => '*',
             'URLPath' => '/path'

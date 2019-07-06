@@ -12,7 +12,7 @@ class SamplingRuleBuilder
         'ReservoirSize' => 1,
         'ResourceARN' => '*',
         'RuleARN' => '*',
-        'RuleName' => __NAMESPACE__,
+        'RuleName' => 'Pkerrigan\\Xray\\SamplingRule',
         'ServiceName' => '*',
         'ServiceType' => '*',
         'URLPath' => '*'
