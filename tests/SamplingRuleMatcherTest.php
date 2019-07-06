@@ -94,5 +94,70 @@ class SamplingRuleMatcherTest extends TestCase
             ]
         ];
     }
+    
+    /**
+     *
+     * @dataProvider provideStringMatchesCriteria
+     */
+    public function testStringMatchesCriteria($criteria, $input, $expected)
+    {
+        $this->assertEquals($expected, $this->samplingRuleMatcher->matchesCriteria($criteria, $input));
+    }
+    
+    public function provideStringMatchesCriteria()
+    {
+        return [
+            "Single-character wildcard (?)" => [
+                "T?st",
+                "Test",
+                true
+            ],
+            "Single-character wildcard (?), too many characters" => [
+                "T?st",
+                "Testo",
+                false
+            ],
+            "Single-character wildcard (?), too few characters" => [
+                "T?st",
+                "Tst",
+                false
+            ],
+            "Multi-character wildcard (*), one character" => [
+                "T*st",
+                "Test",
+                true
+            ],
+            "Multi-character wildcard (*), multiple characters" => [
+                "T*st",
+                "Teest",
+                true
+            ],
+            "Multi-character wildcard (*)" => [
+                "T*st",
+                "Best",
+                false
+            ],
+            "Multi-character wildcard (*), too few characters" => [
+                "T*st",
+                "Tst",
+                false
+            ],
+            "One wildcard character matches anything" => [
+                "*",
+                "",
+                true
+            ],
+            "Case insensitivity" => [
+                "test",
+                "Test",
+                true
+            ],
+            "Protect against arbitray regex" => [
+                "(Test){2}",
+                "TestTest",
+                false
+            ]
+        ];
+    }
 }
 
