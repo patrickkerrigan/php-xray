@@ -101,7 +101,7 @@ class SamplingRuleMatcherTest extends TestCase
      */
     public function testStringMatchesCriteria($criteria, $input, $expected)
     {
-        $this->assertEquals($expected, $this->samplingRuleMatcher->matchesCriteria($criteria, $input));
+        $this->assertEquals($expected, $this->samplingRuleMatcher->stringMatchesCriteria($input, $criteria));
     }
     
     public function provideStringMatchesCriteria()

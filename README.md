@@ -19,7 +19,7 @@ $ composer require pkerrigan/xray ^1.2
 
 ### Creating a trace service
 
-The `TraceService` is a facade that takes care of downloading sampling rules from the AWS console and submitting traces based on the rules you've setup. The library will need to know how to download the sampling rules. Please refer to the [AWS SDK for PHP documentation](https://aws.amazon.com/sdk-for-php/) on how to create and configure a `\Aws\XRay\XRayClient`:
+The `TraceService` is a facade that takes care of downloading sampling rules from the AWS console and submitting traces based on the rules you've setup. Therefore, the library will need to know how to download the sampling rules. *Please refer to the [AWS SDK for PHP documentation](https://aws.amazon.com/sdk-for-php/) on how to create and configure a* `\Aws\XRay\XRayClient`:
 
 ```php
 $xrayClient = new \Aws\XRay\XRayClient($config);
@@ -76,7 +76,6 @@ Trace::getInstance()
 Trace::getInstance()
     ->getCurrentSegment()
     ->end();
-    
 ```
 
 The `getCurrentSegment()` method will always return the most recently opened segment, allowing you to nest as deeply as necessary.
@@ -91,6 +90,26 @@ Trace::getInstance()
     ->setResponseCode(http_response_code());
 
 $traceService->submitTrace(Trace::getInstance());
+```
+
+
+### Fallback sampling rule
+
+If any error occurrs in AWS regarding retrieving sampling rules, you can optionally configure a default sampling rule that will be provided instead. When creating the sampling rule repository:
+
+```php
+// Any options not provided will default to '*'
+$fallbackSamplingRule = (new SamplingRuleBuilder())
+	->setFixedRate(75)
+	->setHttpMethod('GET')
+	->setHost('example.com')
+	->setServiceName('app.example.com')
+	->setServiceType('*')
+	->setUrlPath('/my/path')
+	->build();
+	
+$xrayClient = new \Aws\XRay\XRayClient($config);
+$samplingRuleRepository = new AwsSdkSamplingRuleRepository($xrayClient, $fallbackSamplingRule);
 ```
 
 ## Features not yet implemented
