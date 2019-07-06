@@ -58,7 +58,7 @@ class SamplingRuleMatcher
         // will assure that the user can't enter any arbitray regex in the AWS console
         $criteria = str_replace(['\\*', '\\?'], ['.+', '.{1}'], preg_quote($criteria, '/'));
         
-        return preg_match('/^{$criteria}$/i', $input) === 1;
+        return preg_match("/^{$criteria}$/i", $input) === 1;
     }
 }
 
