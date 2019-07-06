@@ -1,5 +1,8 @@
 <?php
-namespace Pkerrigan\Xray;
+namespace Pkerrigan\Xray\SamplingRule;
+
+use Pkerrigan\Xray\Trace;
+use Pkerrigan\Xray\Utils;
 
 /**
  *

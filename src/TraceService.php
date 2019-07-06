@@ -1,9 +1,10 @@
 <?php
 namespace Pkerrigan\Xray;
 
+use Pkerrigan\Xray\SamplingRule\SamplingRuleMatcher;
 use Pkerrigan\Xray\SamplingRule\SamplingRuleRepository;
-use Pkerrigan\Xray\Submission\SegmentSubmitter;
 use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
+use Pkerrigan\Xray\Submission\SegmentSubmitter;
 
 /**
  * This layer sits ontop of the segment submitter to control which traces are submitted

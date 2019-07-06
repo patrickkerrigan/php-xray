@@ -2,6 +2,7 @@
 namespace Pkerrigan\Xray;
 
 use PHPUnit\Framework\TestCase;
+use Pkerrigan\Xray\SamplingRule\SamplingRuleMatcher;
 use Pkerrigan\Xray\SamplingRule\SamplingRuleRepository;
 use Pkerrigan\Xray\Submission\SegmentSubmitter;
 

@@ -1,7 +1,8 @@
 <?php
-namespace Pkerrigan\Xray;
+namespace Pkerrigan\Xray\SamplingRule;
 
 use PHPUnit\Framework\TestCase;
+use Pkerrigan\Xray\Trace;
 
 class SamplingRuleMatcherTest extends TestCase
 {
