@@ -116,4 +116,4 @@ $samplingRuleRepository = new AwsSdkSamplingRuleRepository($xrayClient, $fallbac
 
 * Exception and stack trace support
 * Submission of incomplete segments
-* Sampling rule reservoir size
+* Matching sampling rule reservoir and resource ARN

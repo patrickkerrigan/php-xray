@@ -59,7 +59,7 @@ class SamplingRuleMatcher
         
         // Lets use regex in order to determine if the criteria matches. Quoting the criteria
         // will assure that the user can't enter any arbitray regex in the AWS console
-        $criteria = str_replace(['\\*', '\\?'], ['.+', '.{1}'], preg_quote($criteria, '/'));
+        $criteria = str_replace(['\\*', '\\?'], ['.*', '.{1}'], preg_quote($criteria, '/'));
         
         return preg_match("/^{$criteria}$/i", $input) === 1;
     }

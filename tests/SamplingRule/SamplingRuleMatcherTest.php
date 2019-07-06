@@ -141,7 +141,7 @@ class SamplingRuleMatcherTest extends TestCase
             'Multi-character wildcard (*), too few characters' => [
                 'T*st',
                 'Tst',
-                false
+                true
             ],
             'One wildcard character matches anything' => [
                 '*',
