@@ -9,22 +9,22 @@ class CachedSamplingRuleRepositoryTest extends TestCase
     public function testGetAllWhenCacheExists()
     {
         $expected = [
-            [ "fake_sampling_rule" ]
+            [ 'fake_sampling_rule' ]
         ];
         
         $repository = $this->createMock(SamplingRuleRepository::class);
         $repository->expects($this->never())
-            ->method("getAll");
+            ->method('getAll');
         
         $cache = $this->createMock(CacheInterface::class);
         $cache->expects($this->once())
-            ->method("has")
+            ->method('has')
             ->willReturn(true);
         $cache->expects($this->once())
-            ->method("get")
+            ->method('get')
             ->willReturn($expected);
         $cache->expects($this->never())
-            ->method("set");
+            ->method('set');
         
         $cachedRepository = new CachedSamplingRuleRepository($repository, $cache);
         $this->assertEquals($expected, $cachedRepository->getAll());
@@ -33,22 +33,22 @@ class CachedSamplingRuleRepositoryTest extends TestCase
     public function testGetAllWhenCacheNotExists()
     {
         $expected = [
-            [ "fake_sampling_rule" ]
+            [ 'fake_sampling_rule' ]
         ];
         
         $repository = $this->createMock(SamplingRuleRepository::class);
         $repository->expects($this->once())
-            ->method("getAll")
+            ->method('getAll')
             ->willReturn($expected);
         
         $cache = $this->createMock(CacheInterface::class);
         $cache->expects($this->once())
-            ->method("has")
+            ->method('has')
             ->willReturn(false);
         $cache->expects($this->never())
-            ->method("get");
+            ->method('get');
         $cache->expects($this->once())
-            ->method("set");
+            ->method('set');
         
         $cachedRepository = new CachedSamplingRuleRepository($repository, $cache);
         $this->assertEquals($expected, $cachedRepository->getAll());

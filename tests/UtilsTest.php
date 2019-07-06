@@ -17,25 +17,25 @@ class UtilsTest extends TestCase
     public function provideSortSamplingRulesByPriority()
     {
         return [
-            "Sort by priority descending" => [
+            'Sort by priority descending' => [
                 [
                     [
-                        "Priority" => 1000,
-                        "RuleName" => "Default"
+                        'Priority' => 1000,
+                        'RuleName' => 'Default'
                     ],
                     [
-                        "Priority" => 1,
-                        "RuleName" => "Important"                   
+                        'Priority' => 1,
+                        'RuleName' => 'Important'                   
                     ]
                 ],
                 [
                     [
-                        "Priority" => 1,
-                        "RuleName" => "Important"
+                        'Priority' => 1,
+                        'RuleName' => 'Important'
                     ],
                     [
-                        "Priority" => 1000,
-                        "RuleName" => "Default"
+                        'Priority' => 1000,
+                        'RuleName' => 'Default'
                     ]
                 ]
             ]

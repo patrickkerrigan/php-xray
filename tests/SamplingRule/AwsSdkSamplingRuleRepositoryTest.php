@@ -11,15 +11,15 @@ class AwsSdkSamplingRuleRepositoryTest extends TestCase
     {
         $xrayClient = $this->createMock(XRayClient::class);
         $xrayClient->expects($this->once())
-            ->method("getPaginator")
-            ->with($this->equalTo("GetSamplingRules"))
+            ->method('getPaginator')
+            ->with($this->equalTo('GetSamplingRules'))
             ->willReturn(new \ArrayIterator([
                 [
-                    "SamplingRuleRecords" => [
+                    'SamplingRuleRecords' => [
                         [
-                            "SamplingRule" => [
-                                "ServiceName" => "*",
-                                "ServiceType" => "*"
+                            'SamplingRule' => [
+                                'ServiceName' => '*',
+                                'ServiceType' => '*'
                             ]
                         ]
                     ]
@@ -30,8 +30,8 @@ class AwsSdkSamplingRuleRepositoryTest extends TestCase
 
         $expected = [
             [
-                "ServiceName" => "*",
-                "ServiceType" => "*"
+                'ServiceName' => '*',
+                'ServiceType' => '*'
             ]
         ];
         

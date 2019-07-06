@@ -34,11 +34,11 @@ class AwsSdkSamplingRuleRepository implements SamplingRuleRepository
             $samplingRules = [];
             
             // See: https://docs.aws.amazon.com/aws-sdk-php/v3/api/api-xray-2016-04-12.html#getsamplingrules
-            $samplingRulesResults = $this->xrayClient->getPaginator("GetSamplingRules");
+            $samplingRulesResults = $this->xrayClient->getPaginator('GetSamplingRules');
             
             foreach ($samplingRulesResults as $samplingRuleResult) {
-                foreach ($samplingRuleResult["SamplingRuleRecords"] as $samplingRule) {
-                    $samplingRules[] = $samplingRule["SamplingRule"];
+                foreach ($samplingRuleResult['SamplingRuleRecords'] as $samplingRule) {
+                    $samplingRules[] = $samplingRule['SamplingRule'];
                 }
             }
             

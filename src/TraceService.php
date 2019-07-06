@@ -39,7 +39,7 @@ class TraceService
         $samplingRules = $this->samplingRuleRepository->getAll();
         $samplingRule = $this->samplingRuleMatcher->matchFirst($trace, $samplingRules);
         
-        $isSampled = $samplingRule !== null && Utils::randomPossibility($samplingRule["FixedRate"] * 100);
+        $isSampled = $samplingRule !== null && Utils::randomPossibility($samplingRule['FixedRate'] * 100);
         $trace->setSampled($isSampled);
 
         if ($isSampled) {

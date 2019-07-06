@@ -30,42 +30,42 @@ class SamplingRuleBuilder
     
     public function setFixedRate(int $percentage): self
     {
-        $this->samplingRule["FixedRate"] = $percentage / 100;
+        $this->samplingRule['FixedRate'] = $percentage / 100;
         
         return $this;
     }
     
     public function setHttpMethod(string $httpMethod): self
     {
-        $this->samplingRule["HTTPMethod"] = $httpMethod;
+        $this->samplingRule['HTTPMethod'] = $httpMethod;
         
         return $this;
     }
     
     public function setHost(string $host): self
     {
-        $this->samplingRule["Host"] = $host;
+        $this->samplingRule['Host'] = $host;
         
         return $this;
     }
     
     public function setServiceName(string $serviceName): self
     {
-        $this->samplingRule["ServiceName"] = $serviceName;
+        $this->samplingRule['ServiceName'] = $serviceName;
         
         return $this;
     }
     
     public function setServiceType(string $serviceType): self
     {
-        $this->samplingRule["ServiceType"] = $serviceType;
+        $this->samplingRule['ServiceType'] = $serviceType;
         
         return $this;
     }
     
     public function setUrlPath(string $urlPath): self
     {
-        $this->samplingRule["URLPath"] = $urlPath;
+        $this->samplingRule['URLPath'] = $urlPath;
         
         return $this;
     }

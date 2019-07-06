@@ -25,15 +25,15 @@ class SamplingRuleMatcherTest extends TestCase
         return [
             [
                 (new Trace())
-                    ->setUrl("https://example.com/path")
-                    ->setMethod("GET")
-                    ->setName("application"),
+                    ->setUrl('https://example.com/path')
+                    ->setMethod('GET')
+                    ->setName('application'),
                 [
-                    "HTTPMethod" => "GET",
-                    "Host" => "example.com",
-                    "URLPath" => "/path",
-                    "ServiceName" => "app*",
-                    "ServiceType" => "*"
+                    'HTTPMethod' => 'GET',
+                    'Host' => 'example.com',
+                    'URLPath' => '/path',
+                    'ServiceName' => 'app*',
+                    'ServiceType' => '*'
                 ],
                 true
             ]            
@@ -51,45 +51,45 @@ class SamplingRuleMatcherTest extends TestCase
         return [
             [
                 (new Trace())
-                    ->setUrl("https://example.com/path")
-                    ->setMethod("GET"),
+                    ->setUrl('https://example.com/path')
+                    ->setMethod('GET'),
                 [
                     [
-                        "Priority" => 1000,
-                        "HTTPMethod" => "GET",
-                        "Host" => "example.com",
-                        "URLPath" => "/path",
-                        "RuleName" => "Default",
-                        "ServiceName" => "*",
-                        "ServiceType" => "*"
+                        'Priority' => 1000,
+                        'HTTPMethod' => 'GET',
+                        'Host' => 'example.com',
+                        'URLPath' => '/path',
+                        'RuleName' => 'Default',
+                        'ServiceName' => '*',
+                        'ServiceType' => '*'
                     ],
                     [
-                        "Priority" => 1,
-                        "HTTPMethod" => "GET",
-                        "Host" => "*",
-                        "URLPath" => "/any/path",
-                        "RuleName" => "Not matching",
-                        "ServiceName" => "*",
-                        "ServiceType" => "*"
+                        'Priority' => 1,
+                        'HTTPMethod' => 'GET',
+                        'Host' => '*',
+                        'URLPath' => '/any/path',
+                        'RuleName' => 'Not matching',
+                        'ServiceName' => '*',
+                        'ServiceType' => '*'
                     ],
                     [
-                        "Priority" => 5,
-                        "HTTPMethod" => "GET",
-                        "Host" => "*",
-                        "URLPath" => "/path",
-                        "RuleName" => "Important",
-                        "ServiceName" => "*",
-                        "ServiceType" => "*"
+                        'Priority' => 5,
+                        'HTTPMethod' => 'GET',
+                        'Host' => '*',
+                        'URLPath' => '/path',
+                        'RuleName' => 'Important',
+                        'ServiceName' => '*',
+                        'ServiceType' => '*'
                     ]
                 ],
                 [
-                    "Priority" => 5,
-                    "HTTPMethod" => "GET",
-                    "Host" => "*",
-                    "URLPath" => "/path",
-                    "RuleName" => "Important",
-                    "ServiceName" => "*",
-                    "ServiceType" => "*"
+                    'Priority' => 5,
+                    'HTTPMethod' => 'GET',
+                    'Host' => '*',
+                    'URLPath' => '/path',
+                    'RuleName' => 'Important',
+                    'ServiceName' => '*',
+                    'ServiceType' => '*'
                 ]
             ]
         ];
@@ -107,54 +107,54 @@ class SamplingRuleMatcherTest extends TestCase
     public function provideStringMatchesCriteria()
     {
         return [
-            "Single-character wildcard (?)" => [
-                "T?st",
-                "Test",
+            'Single-character wildcard (?)' => [
+                'T?st',
+                'Test',
                 true
             ],
-            "Single-character wildcard (?), too many characters" => [
-                "T?st",
-                "Testo",
+            'Single-character wildcard (?), too many characters' => [
+                'T?st',
+                'Testo',
                 false
             ],
-            "Single-character wildcard (?), too few characters" => [
-                "T?st",
-                "Tst",
+            'Single-character wildcard (?), too few characters' => [
+                'T?st',
+                'Tst',
                 false
             ],
-            "Multi-character wildcard (*), one character" => [
-                "T*st",
-                "Test",
+            'Multi-character wildcard (*), one character' => [
+                'T*st',
+                'Test',
                 true
             ],
-            "Multi-character wildcard (*), multiple characters" => [
-                "T*st",
-                "Teest",
+            'Multi-character wildcard (*), multiple characters' => [
+                'T*st',
+                'Teest',
                 true
             ],
-            "Multi-character wildcard (*)" => [
-                "T*st",
-                "Best",
+            'Multi-character wildcard (*)' => [
+                'T*st',
+                'Best',
                 false
             ],
-            "Multi-character wildcard (*), too few characters" => [
-                "T*st",
-                "Tst",
+            'Multi-character wildcard (*), too few characters' => [
+                'T*st',
+                'Tst',
                 false
             ],
-            "One wildcard character matches anything" => [
-                "*",
-                "",
+            'One wildcard character matches anything' => [
+                '*',
+                '',
                 true
             ],
-            "Case insensitivity" => [
-                "test",
-                "Test",
+            'Case insensitivity' => [
+                'test',
+                'Test',
                 true
             ],
-            "Protect against arbitray regex" => [
-                "(Test){2}",
-                "TestTest",
+            'Protect against arbitray regex' => [
+                '(Test){2}',
+                'TestTest',
                 false
             ]
         ];

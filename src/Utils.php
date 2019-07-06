@@ -12,7 +12,7 @@ class Utils
     public static function sortSamplingRulesByPriorityDescending(array $samplingRules): array
     {
         usort($samplingRules, function($samplingRule, $samplingRuleOther) {
-            return $samplingRule["Priority"] - $samplingRuleOther["Priority"];
+            return $samplingRule['Priority'] - $samplingRuleOther['Priority'];
         });
         
         return $samplingRules;

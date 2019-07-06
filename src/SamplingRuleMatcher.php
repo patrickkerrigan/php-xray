@@ -27,11 +27,11 @@ class SamplingRuleMatcher
         $url = parse_url($trace->getUrl());
         
         $criterias = [
-            $samplingRule["ServiceName"] => $trace->getName() ?? '',
-            $samplingRule["ServiceType"] => $trace->getType() ?? '',
-            $samplingRule["HTTPMethod"] => $trace->getMethod(),
-            $samplingRule["URLPath"] => $url['path'] ?? '',
-            $samplingRule["Host"] => $url['host'] ?? ''
+            $samplingRule['ServiceName'] => $trace->getName() ?? '',
+            $samplingRule['ServiceType'] => $trace->getType() ?? '',
+            $samplingRule['HTTPMethod'] => $trace->getMethod(),
+            $samplingRule['URLPath'] => $url['path'] ?? '',
+            $samplingRule['Host'] => $url['host'] ?? ''
         ];
 
         foreach ($criterias as $criteria => $input) {
@@ -50,15 +50,15 @@ class SamplingRuleMatcher
          * or a single-character wildcard (?)
          * See: https://docs.aws.amazon.com/xray/latest/devguide/xray-console-sampling.html?icmpid=docs_xray_console#xray-console-sampling-options
          */
-        if ($criteria === "*") {
+        if ($criteria === '*') {
             return true;
         }
         
         // Lets use regex in order to determine if the criteria matches. Quoting the criteria
         // will assure that the user can't enter any arbitray regex in the AWS console
-        $criteria = str_replace(["\\*", "\\?"], [".+", ".{1}"], preg_quote($criteria, "/"));
+        $criteria = str_replace(['\\*', '\\?'], ['.+', '.{1}'], preg_quote($criteria, '/'));
         
-        return preg_match("/^{$criteria}$/i", $input) === 1;
+        return preg_match('/^{$criteria}$/i', $input) === 1;
     }
 }
 
