@@ -143,9 +143,14 @@ class SamplingRuleMatcherTest extends TestCase
                 'Tst',
                 true
             ],
-            'One wildcard character matches anything' => [
+            'One multi-character wildcard matches empty' => [
                 '*',
                 '',
+                true
+            ],
+            'One wildcard character matches any single character' => [
+                '?',
+                'T',
                 true
             ],
             'Case insensitivity' => [

@@ -52,11 +52,7 @@ class SamplingRuleMatcher
          * Check if a criteria matches a given input. A criteria can include a multi-character wildcard (*)
          * or a single-character wildcard (?)
          * See: https://docs.aws.amazon.com/xray/latest/devguide/xray-console-sampling.html?icmpid=docs_xray_console#xray-console-sampling-options
-         */
-        if ($criteria === '*') {
-            return true;
-        }
-        
+         */        
         // Lets use regex in order to determine if the criteria matches. Quoting the criteria
         // will assure that the user can't enter any arbitray regex in the AWS console
         $criteria = str_replace(['\\*', '\\?'], ['.*', '.{1}'], preg_quote($criteria, '/'));
