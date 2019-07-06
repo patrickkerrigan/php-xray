@@ -52,6 +52,11 @@ class UtilsTest extends TestCase
                 "Best",
                 false
             ],
+            "Multi-character wildcard (*)" => [
+                "T*st",
+                "Tst",
+                false
+            ],
             "One wildcard character matches anything" => [
                 "*",
                 "",
