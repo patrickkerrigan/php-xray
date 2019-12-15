@@ -25,6 +25,6 @@
     },
 
     "require-dev": {
-        "phpunit/phpunit": "^6"
+        "phpunit/phpunit": "^8 || ^7 || ^6"
     }
 }
