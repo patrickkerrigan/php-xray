@@ -270,4 +270,42 @@ class SegmentTest extends TestCase
 
         $this->assertEquals($subsegment, $segment->getCurrentSegment());
     }
+
+    public function testSubsequentCallsCurrentSegmentReturnsSubsegment()
+    {
+        $subsegment = new Segment();
+        $subsegment->begin();
+        $segment = new Segment();
+        $segment->begin()
+                ->addSubsegment($subsegment);
+
+        $this->assertEquals($subsegment, $segment->getCurrentSegment());
+        $this->assertEquals($subsegment, $segment->getCurrentSegment());
+    }
+
+    public function testChangingCurrentSegmentReturnsCorrectStatus()
+    {
+        $subsegment1 = new Segment();
+        $subsegment1->begin();
+        $subsegment2 = new Segment();
+        $subsegment2->begin();
+        $subsegment3 = new Segment();
+        $subsegment3->begin();
+
+        $segment = new Segment();
+        $segment->begin()
+                ->addSubsegment($subsegment1)
+                ->addSubsegment($subsegment2)
+                ->addSubsegment($subsegment3);
+
+        $this->assertEquals($subsegment1, $segment->getCurrentSegment());
+
+        $subsegment1->end();
+
+        $this->assertEquals($subsegment2, $segment->getCurrentSegment());
+
+        $subsegment2->end();
+
+        $this->assertEquals($subsegment3, $segment->getCurrentSegment());
+    }
 }
