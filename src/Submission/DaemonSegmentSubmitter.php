@@ -88,7 +88,7 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
     {
         $rawSegment = $segment->jsonSerialize();
         /** @var Segment[] $subsegments */
-        $subsegments = $rawSegment['subsegments'];
+        $subsegments = $rawSegment['subsegments'] ?? [];
         unset($rawSegment['subsegments']);
         $this->submitOpenSegment($rawSegment);
 
