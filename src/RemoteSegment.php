@@ -15,6 +15,8 @@ class RemoteSegment extends Segment
     protected $traced = false;
 
     /**
+     * @deprecated Please use HttpSegment.setTraced
+     *
      * @param bool $traced
      * @return static
      */

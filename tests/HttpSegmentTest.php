@@ -25,4 +25,15 @@ class HttpSegmentTest extends TestCase
         $this->assertEquals('GET', $serialised['http']['request']['method']);
         $this->assertEquals(200, $serialised['http']['response']['status']);
     }
+
+    public function testTracedSegmentSerialisesCorrectly()
+    {
+        $segment = new HttpSegment();
+        $segment->setTraced(true);
+
+        $serialised = $segment->jsonSerialize();
+
+        $this->assertEquals($segment->getId(), $serialised['id']);
+        $this->assertTrue($serialised['http']['request']['traced']);
+    }
 }
