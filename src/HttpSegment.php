@@ -22,4 +22,15 @@ class HttpSegment extends RemoteSegment
 
         return array_filter($data);
     }
+
+    /**
+     * @param bool $traced
+     * @return static
+     */
+    public function setTraced(bool $traced)
+    {
+        $this->traced = $traced;
+
+        return $this;
+    }
 }
