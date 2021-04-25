@@ -72,11 +72,14 @@ trait HttpTrait
     }
 
     /**
-     * @param mixed $contentLength
+     * @param int $contentLength
+     * @return static
      */
-    public function setContentLength($contentLength): void
+    public function setContentLength($contentLength)
     {
         $this->contentLength = $contentLength;
+
+        return $this;
     }
 
     /**
