@@ -33,6 +33,10 @@ trait HttpTrait
      * @var bool
      */
     protected $traced;
+    /**
+     * @var int
+     */
+    protected $contentLength;
 
     /**
      * @param string $url
@@ -68,6 +72,14 @@ trait HttpTrait
     }
 
     /**
+     * @param mixed $contentLength
+     */
+    public function setContentLength($contentLength): void
+    {
+        $this->contentLength = $contentLength;
+    }
+
+    /**
      * @return array
      */
     protected function serialiseHttpData(): array
@@ -81,7 +93,8 @@ trait HttpTrait
                 'traced' => $this->traced
             ]),
             'response' => array_filter([
-                'status' => $this->responseCode
+                'status' => $this->responseCode,
+                'content_length' => $this->contentLength
             ])
         ];
     }
