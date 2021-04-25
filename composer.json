@@ -1,5 +1,5 @@
 {
-    "name": "pkerrigan/xray",
+    "name": "waylandace/xray",
     "description": "A basic PHP instrumentation library for AWS X-Ray",
     "keywords": ["AWS", "X-Ray", "AWS X-Ray", "APM", "Tracing"],
     "type": "library",
@@ -10,21 +10,23 @@
             "homepage": "https://patrickkerrigan.uk/"
         }
     ],
-
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.4|8.0",
         "ext-json": "*"
     },
-
     "autoload": {
         "psr-4": {"Pkerrigan\\Xray\\": "src/"}
     },
-
     "autoload-dev": {
         "psr-4": {"Pkerrigan\\Xray\\": "tests/"}
     },
-
     "require-dev": {
         "phpunit/phpunit": "^6.2"
+    },
+    "replace": {
+        "pkerrigan/xray": "*"
+    },
+    "conflict": {
+        "pkerrigan/xray": "*"
     }
 }
