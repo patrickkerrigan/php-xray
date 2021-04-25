@@ -17,14 +17,14 @@ class DaemonSegmentSubmitterTest extends TestCase
      */
     private $socket;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
         socket_bind($this->socket, '127.0.0.1', 2000);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         socket_close($this->socket);
         parent::tearDown();
