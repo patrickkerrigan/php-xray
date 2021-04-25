@@ -5,11 +5,8 @@ env:
     - XDEBUG_MODE=coverage
 
 php:
-  - 7.0
-  - 7.1
-  - 7.2
-  - 7.3
   - 7.4
+  - 8.0
 
 before_script:
   - composer require codeclimate/php-test-reporter:dev-master --dev
