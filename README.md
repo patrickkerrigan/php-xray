@@ -1,6 +1,4 @@
-[![Build Status](https://img.shields.io/travis/waylandace/php-xray.svg?style=flat-square)](https://travis-ci.com/waylandace/php-xray) 
-[![Maintainability](https://api.codeclimate.com/v1/badges/01ab65554d5394934e97/maintainability)](https://codeclimate.com/github/WaylandAce/php-xray/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/01ab65554d5394934e97/test_coverage)](https://codeclimate.com/github/WaylandAce/php-xray/test_coverage) 
+[![Build Status](https://img.shields.io/travis/waylandace/php-xray.svg?style=flat-square)](https://travis-ci.com/waylandace/php-xray)
 [![PHP 7.0](https://img.shields.io/badge/php-7.0-blue.svg?style=flat-square)](http://php.net/)  
 [![Packagist](https://img.shields.io/packagist/v/waylandace/xray.svg?style=flat-square)](https://packagist.org/packages/waylandace/xray)
 
