@@ -1,4 +1,8 @@
-[![Build Status](https://img.shields.io/travis/waylandace/php-xray.svg?style=flat-square)](https://travis-ci.org/waylandace/php-xray) [![Maintainability](https://api.codeclimate.com/v1/badges/548ad6b7c25bef8004cd/maintainability)](https://codeclimate.com/github/patrickkerrigan/php-xray/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/548ad6b7c25bef8004cd/test_coverage)](https://codeclimate.com/github/patrickkerrigan/php-xray/test_coverage) [![PHP 7.0](https://img.shields.io/badge/php-7.0-blue.svg?style=flat-square)](http://php.net/)  [![Packagist](https://img.shields.io/packagist/v/pkerrigan/xray.svg?style=flat-square)](https://packagist.org/packages/pkerrigan/xray)
+[![Build Status](https://img.shields.io/travis/waylandace/php-xray.svg?style=flat-square)](https://travis-ci.com/waylandace/php-xray) 
+[![Maintainability](https://api.codeclimate.com/v1/badges/01ab65554d5394934e97/maintainability)](https://codeclimate.com/github/WaylandAce/php-xray/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/01ab65554d5394934e97/test_coverage)](https://codeclimate.com/github/WaylandAce/php-xray/test_coverage) 
+[![PHP 7.0](https://img.shields.io/badge/php-7.0-blue.svg?style=flat-square)](http://php.net/)  
+[![Packagist](https://img.shields.io/packagist/v/waylandace/xray.svg?style=flat-square)](https://packagist.org/packages/waylandace/xray)
 
 
 # waylandace\xray
@@ -13,7 +17,7 @@ Please note that no automatic instrumentation of popular libraries is provided. 
 The recommended way to install this library is using Composer:
 
 ```bash
-$ composer require pkerrigan/xray ^1.2
+$ composer require waylandace/xray ^1.2
 ```
 
 ## Usage
