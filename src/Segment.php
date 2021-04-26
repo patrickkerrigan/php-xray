@@ -9,6 +9,7 @@ use Pkerrigan\Xray\Submission\SegmentSubmitter;
  *
  * @author Patrick Kerrigan (patrickkerrigan.uk)
  * @since 13/05/2018
+ * @SuppressWarnings(PHPMD.TooManyMethods)
  */
 class Segment implements JsonSerializable
 {
