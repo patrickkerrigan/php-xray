@@ -27,9 +27,9 @@ class SqsSegment extends RemoteSegment
 
     protected function serialiseAwsData(): array
     {
-        return [
+        return array_merge(parent::serialiseAwsData(), [
             'operation' => 'SendMessage',
             'queue_url' => $this->queueUrl,
-        ];
+        ]);
     }
 }

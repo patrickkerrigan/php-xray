@@ -49,6 +49,7 @@ class Segment implements JsonSerializable
      */
     private array $metadata;
     private int $lastOpenSegment = 0;
+    private ?int $awsAccountId = null;
 
     public function __construct()
     {
@@ -159,6 +160,13 @@ class Segment implements JsonSerializable
         return $this;
     }
 
+    public function setAwsAccountId(int $awsAccountId): self
+    {
+        $this->awsAccountId = $awsAccountId;
+
+        return $this;
+    }
+
     public function addAnnotation(string $key, string $value): self
     {
         $this->annotations[$key] = $value;
@@ -201,7 +209,15 @@ class Segment implements JsonSerializable
             'fault' => $this->fault,
             'error' => $this->error,
             'annotations' => empty($this->annotations) ? null : $this->annotations,
-            'metadata' => empty($this->metadata) ? null : $this->metadata
+            'metadata' => empty($this->metadata) ? null : $this->metadata,
+            'aws' => $this->serialiseAwsData(),
         ]);
+    }
+
+    protected function serialiseAwsData(): array
+    {
+        return [
+            'account_id' => $this->awsAccountId,
+        ];
     }
 }

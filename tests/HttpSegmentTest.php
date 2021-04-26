@@ -16,10 +16,12 @@ class HttpSegmentTest extends TestCase
     public function testSerialisesCorrectly(): void
     {
         $segment = new HttpSegment();
-        $segment->setUrl('http://example.com/')
+        $segment
+            ->setUrl('http://example.com/')
             ->setMethod('GET')
             ->setResponseCode(200)
-            ->setContentLength(300);
+            ->setContentLength(300)
+            ->setAwsAccountId(123456);
 
         $serialised = $segment->jsonSerialize();
 
@@ -28,6 +30,7 @@ class HttpSegmentTest extends TestCase
         $this->assertEquals('GET', $serialised['http']['request']['method']);
         $this->assertEquals(200, $serialised['http']['response']['status']);
         $this->assertEquals(300, $serialised['http']['response']['content_length']);
+        $this->assertEquals(123456, $serialised['aws']['account_id']);
     }
 
     public function testTracedSegmentSerialisesCorrectly(): void

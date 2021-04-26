@@ -24,7 +24,8 @@ class TraceTest extends TestCase
     public function testSerialisesCorrectly(): void
     {
         $trace = new Trace();
-        $trace->setName('Test trace')
+        $trace
+            ->setName('Test trace')
             ->setServiceVersion('1.2.3')
             ->setUser('TestUser')
             ->setUrl('http://example.com')
@@ -32,11 +33,13 @@ class TraceTest extends TestCase
             ->setClientIpAddress('127.0.0.1')
             ->setUserAgent('TestAgent')
             ->setResponseCode(200)
+            ->setAwsAccountId(1234)
             ->begin()
             ->end();
 
         $serialised = $trace->jsonSerialize();
 
+        $this->assertEquals(1234, $serialised['aws']['account_id']);
         $this->assertEquals('Test trace', $serialised['name']);
         $this->assertEquals('1.2.3', $serialised['service']['version']);
         $this->assertEquals('TestUser', $serialised['user']);
