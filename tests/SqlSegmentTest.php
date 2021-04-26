@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pkerrigan\Xray;
 
 use PHPUnit\Framework\TestCase;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SqlSegmentTest extends TestCase
 {
-    public function testSerialisesCorrectly()
+    public function testSerialisesCorrectly(): void
     {
         $segment = new SqlSegment();
         $segment->setQuery('SELECT *')

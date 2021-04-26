@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pkerrigan\Xray;
 
 use PHPUnit\Framework\TestCase;
@@ -13,7 +15,7 @@ use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
 class DaemonSegmentSubmitterTest extends TestCase
 {
     /**
-     * @var resource
+     * @var \Socket|resource
      */
     private $socket;
 
@@ -30,7 +32,7 @@ class DaemonSegmentSubmitterTest extends TestCase
         parent::tearDown();
     }
 
-    public function testSubmitsToDaemon()
+    public function testSubmitsToDaemon(): void
     {
         $segment = new Segment();
         $segment->setSampled(true)
@@ -44,7 +46,7 @@ class DaemonSegmentSubmitterTest extends TestCase
         $this->assertPacketsReceived([$segment], $packets);
     }
 
-    public function testSubmitsLongTraceAsFragmented()
+    public function testSubmitsLongTraceAsFragmented(): void
     {
         $subsegment1 = (new SqlSegment())
             ->setQuery(str_repeat('a', 30000));
@@ -88,11 +90,7 @@ class DaemonSegmentSubmitterTest extends TestCase
         $this->assertPacketsReceived($expectedPackets, $buffer);
     }
 
-    /**
-     * @param $expectedPackets
-     * @param $buffer
-     */
-    private function assertPacketsReceived($expectedPackets, $buffer)
+    private function assertPacketsReceived(array $expectedPackets, array $buffer): void
     {
         for ($i = 0; $i < count($expectedPackets); $i++) {
             $this->assertEquals(
@@ -102,10 +100,6 @@ class DaemonSegmentSubmitterTest extends TestCase
         }
     }
 
-    /**
-     * @param int $number
-     * @return array
-     */
     private function receivePackets(int $number): array
     {
         $from = '';

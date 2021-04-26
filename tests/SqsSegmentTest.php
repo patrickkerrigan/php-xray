@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pkerrigan\Xray;
 
 use PHPUnit\Framework\TestCase;
 
 class SqsSegmentTest extends TestCase
 {
-    public function testSerialisesCorrectly()
+    public function testSerialisesCorrectly(): void
     {
         $segment = new SqsSegment();
         $segment->setQueueUrl('http://');

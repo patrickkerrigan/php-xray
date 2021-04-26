@@ -12,7 +12,8 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-sockets": "*"
     },
     "autoload": {
         "psr-4": {"Pkerrigan\\Xray\\": "src/"}

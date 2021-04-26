@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pkerrigan\Xray;
 
 /**
@@ -11,23 +13,11 @@ class Trace extends Segment
 {
     use HttpTrait;
 
-    /**
-     * @var static
-     */
     private static $instance;
-    /**
-     * @var string
-     */
-    private $serviceVersion;
-    /**
-     * @var string
-     */
-    private $user;
+    private ?string $serviceVersion = null;
+    private ?string $user = null;
 
-    /**
-     * @return static
-     */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (is_null(self::$instance)) {
             self::$instance = new static();
@@ -36,11 +26,7 @@ class Trace extends Segment
         return self::$instance;
     }
 
-    /**
-     * @param string $traceHeader
-     * @return static
-     */
-    public function setTraceHeader(string $traceHeader = null)
+    public function setTraceHeader(string $traceHeader = null): self
     {
         if (is_null($traceHeader)) {
             return $this;
@@ -57,60 +43,41 @@ class Trace extends Segment
         if (isset($variables['Root'])) {
             $this->setTraceId($variables['Root']);
         }
-        $this->setSampled($variables['Sampled'] ?? false);
+        $this->setSampled((bool) ($variables['Sampled'] ?? false));
         $this->setParentId($variables['Parent'] ?? null);
 
         return $this;
     }
 
-    /**
-     * @param string $serviceVersion
-     * @return static
-     */
-    public function setServiceVersion(string $serviceVersion)
+    public function setServiceVersion(string $serviceVersion): self
     {
         $this->serviceVersion = $serviceVersion;
 
         return $this;
     }
 
-    /**
-     * @param string $user
-     * @return static
-     */
-    public function setUser(string $user)
+    public function setUser(string $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * @param string $clientIpAddress
-     * @return static
-     */
-    public function setClientIpAddress(string $clientIpAddress)
+    public function setClientIpAddress(string $clientIpAddress): self
     {
         $this->clientIpAddress = $clientIpAddress;
 
         return $this;
     }
 
-    /**
-     * @param string $userAgent
-     * @return static
-     */
-    public function setUserAgent(string $userAgent)
+    public function setUserAgent(string $userAgent): self
     {
         $this->userAgent = $userAgent;
 
         return $this;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function begin(int $samplePercentage = 10)
+    public function begin(int $samplePercentage = 10): self
     {
         parent::begin();
 
@@ -128,7 +95,7 @@ class Trace extends Segment
     /**
      * @inheritdoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $data = parent::jsonSerialize();
 
@@ -139,7 +106,7 @@ class Trace extends Segment
         return array_filter($data);
     }
 
-    private function generateTraceId()
+    private function generateTraceId(): void
     {
         $startHex = dechex((int)$this->startTime);
         $uuid = bin2hex(random_bytes(12));

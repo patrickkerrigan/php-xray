@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pkerrigan\Xray;
 
 use JsonSerializable;
@@ -13,126 +15,82 @@ use Pkerrigan\Xray\Submission\SegmentSubmitter;
 class Segment implements JsonSerializable
 {
     /**
-     * @var string
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
-    protected $id;
-    /**
-     * @var string
-     */
-    protected $parentId;
-    /**
-     * @var string
-     */
-    protected $traceId;
-    /**
-     * @var string|null
-     */
-    protected $name;
-    /**
-     * @var float
-     */
-    protected $startTime;
-    /**
-     * @var float
-     */
-    protected $endTime;
+    protected string $id;
+
+    protected ?string $parentId = null;
+
+    protected ?string $traceId = null;
+
+    protected ?string $name;
+
+    protected ?float $startTime = null;
+
+    protected ?float $endTime = null;
     /**
      * @var Segment[]
      */
-    protected $subsegments = [];
-    /**
-     * @var bool
-     */
-    protected $error = false;
-    /**
-     * @var bool
-     */
-    protected $fault = false;
-    /**
-     * @var bool
-     */
-    protected $sampled = false;
-    /**
-     * @var bool
-     */
-    protected $independent = false;
+    protected array $subsegments = [];
+
+    protected bool $error = false;
+
+    protected bool $fault = false;
+
+    protected bool $sampled = false;
+
+    protected bool $independent = false;
     /**
      * @var string[]
      */
-    private $annotations;
+    private array $annotations;
     /**
      * @var string[]
      */
-    private $metadata;
-    /**
-     * @var int
-     */
-    private $lastOpenSegment = 0;
+    private array $metadata;
+    private int $lastOpenSegment = 0;
 
     public function __construct()
     {
         $this->id = bin2hex(random_bytes(8));
     }
 
-    /**
-     * @return static
-     */
-    public function begin()
+    public function begin(): self
     {
         $this->startTime = microtime(true);
 
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function end()
+    public function end(): self
     {
         $this->endTime = microtime(true);
 
         return $this;
     }
 
-    /**
-     * @param string $name
-     * @return static
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * @param bool $error
-     * @return static
-     */
-    public function setError(bool $error)
+    public function setError(bool $error): self
     {
         $this->error = $error;
 
         return $this;
     }
 
-    /**
-     * @param bool $fault
-     * @return static
-     */
-    public function setFault(bool $fault)
+    public function setFault(bool $fault): self
     {
         $this->fault = $fault;
 
         return $this;
     }
 
-    /**
-     * @param Segment $subsegment
-     * @return static
-     */
-    public function addSubsegment(Segment $subsegment)
+    public function addSubsegment(Segment $subsegment): self
     {
         if (!$this->isOpen()) {
             return $this;
@@ -144,10 +102,7 @@ class Segment implements JsonSerializable
         return $this;
     }
 
-    /**
-     * @param SegmentSubmitter $submitter
-     */
-    public function submit(SegmentSubmitter $submitter)
+    public function submit(SegmentSubmitter $submitter): void
     {
         if (!$this->isSampled()) {
             return;
@@ -156,109 +111,68 @@ class Segment implements JsonSerializable
         $submitter->submitSegment($this);
     }
 
-    /**
-     * @return bool
-     */
     public function isSampled(): bool
     {
         return $this->sampled;
     }
 
-    /**
-     * @param bool $sampled
-     * @return static
-     */
-    public function setSampled(bool $sampled)
+    public function setSampled(bool $sampled): self
     {
         $this->sampled = $sampled;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @param string $parentId
-     * @return static
-     */
-    public function setParentId(string $parentId = null)
+    public function setParentId(string $parentId = null): self
     {
         $this->parentId = $parentId;
 
         return $this;
     }
 
-    /**
-     * @param string $traceId
-     * @return static
-     */
-    public function setTraceId(string $traceId)
+    public function setTraceId(string $traceId): self
     {
         $this->traceId = $traceId;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTraceId(): string
     {
         return $this->traceId;
     }
 
-    /**
-     * @return bool
-     */
     public function isOpen(): bool
     {
         return !is_null($this->startTime) && is_null($this->endTime);
     }
 
-    /**
-     * @param bool $independent
-     * @return static
-     */
-    public function setIndependent(bool $independent)
+    public function setIndependent(bool $independent): self
     {
         $this->independent = $independent;
 
         return $this;
     }
 
-    /**
-     * @param string $key
-     * @param string $value
-     * @return static
-     */
-    public function addAnnotation(string $key, string $value)
+    public function addAnnotation(string $key, string $value): self
     {
         $this->annotations[$key] = $value;
 
         return $this;
     }
 
-    /**
-     * @param string $key
-     * @param $value
-     * @return static
-     */
-    public function addMetadata(string $key, $value)
+    public function addMetadata(string $key, $value): self
     {
         $this->metadata[$key] = $value;
 
         return $this;
     }
 
-    /**
-     * @return Segment
-     */
     public function getCurrentSegment(): Segment
     {
         for ($max = count($this->subsegments); $this->lastOpenSegment < $max; $this->lastOpenSegment++) {
@@ -273,7 +187,7 @@ class Segment implements JsonSerializable
     /**
      * @inheritdoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return array_filter([
             'id' => $this->id,

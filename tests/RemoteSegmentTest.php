@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pkerrigan\Xray;
 
 use PHPUnit\Framework\TestCase;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class RemoteSegmentTest extends TestCase
 {
-    public function testUntracedSegmentSerialisesCorrectly()
+    public function testUntracedSegmentSerialisesCorrectly(): void
     {
         $segment = new RemoteSegment();
 

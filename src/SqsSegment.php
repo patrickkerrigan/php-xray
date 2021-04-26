@@ -1,13 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pkerrigan\Xray;
 
 class SqsSegment extends RemoteSegment
 {
-    /**
-     * @var string|null
-     */
-    protected $queueUrl;
+    protected ?string $queueUrl;
 
     public function jsonSerialize(): array
     {
@@ -19,11 +18,7 @@ class SqsSegment extends RemoteSegment
         return array_filter($data);
     }
 
-    /**
-     * @param string|null $queueUrl
-     * @return static
-     */
-    public function setQueueUrl(string $queueUrl)
+    public function setQueueUrl(string $queueUrl): self
     {
         $this->queueUrl = $queueUrl;
 

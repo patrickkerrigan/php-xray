@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pkerrigan\Xray;
 
 /**
@@ -9,82 +11,48 @@ namespace Pkerrigan\Xray;
  */
 trait HttpTrait
 {
-    /**
-     * @var string
-     */
-    protected $url;
-    /**
-     * @var string
-     */
-    protected $method;
-    /**
-     * @var string
-     */
-    protected $clientIpAddress;
-    /**
-     * @var string
-     */
-    protected $userAgent;
-    /**
-     * @var int
-     */
-    protected $responseCode;
-    /**
-     * @var bool
-     */
-    protected $traced;
-    /**
-     * @var int
-     */
-    protected $contentLength;
+    protected ?string $url = null;
 
-    /**
-     * @param string $url
-     * @return static
-     */
-    public function setUrl(string $url)
+    protected ?string $method = null;
+
+    protected ?string $clientIpAddress = null;
+
+    protected ?string $userAgent = null;
+
+    protected ?int $responseCode = null;
+
+    protected bool $traced = false;
+
+    protected ?int $contentLength = null;
+
+    public function setUrl(string $url): self
     {
         $this->url = $url;
 
         return $this;
     }
 
-    /**
-     * @param string $method
-     * @return static
-     */
-    public function setMethod(string $method)
+    public function setMethod(string $method): self
     {
         $this->method = $method;
 
         return $this;
     }
 
-    /**
-     * @param int $responseCode
-     * @return static
-     */
-    public function setResponseCode(int $responseCode)
+    public function setResponseCode(int $responseCode): self
     {
         $this->responseCode = $responseCode;
 
         return $this;
     }
 
-    /**
-     * @param int $contentLength
-     * @return static
-     */
-    public function setContentLength($contentLength)
+    public function setContentLength(int $contentLength): self
     {
         $this->contentLength = $contentLength;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
     protected function serialiseHttpData(): array
     {
         return [
