@@ -12,7 +12,7 @@ Please note that no automatic instrumentation of popular libraries is provided. 
 The recommended way to install this library is using Composer:
 
 ```bash
-$ composer require pkerrigan/xray ^1.2
+$ composer require pkerrigan/xray ^1
 ```
 
 ## Usage
