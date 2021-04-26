@@ -32,7 +32,7 @@ trait HttpTrait
     /**
      * @var bool
      */
-    protected $traced;
+    protected $traced = false;
 
     /**
      * @param string $url
