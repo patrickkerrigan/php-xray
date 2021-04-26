@@ -16,7 +16,8 @@ class HttpSegmentTest extends TestCase
         $segment = new HttpSegment();
         $segment->setUrl('http://example.com/')
             ->setMethod('GET')
-            ->setResponseCode(200);
+            ->setResponseCode(200)
+            ->setAwsAccountId(123);
 
         $serialised = $segment->jsonSerialize();
 
@@ -24,5 +25,6 @@ class HttpSegmentTest extends TestCase
         $this->assertEquals('http://example.com/', $serialised['http']['request']['url']);
         $this->assertEquals('GET', $serialised['http']['request']['method']);
         $this->assertEquals(200, $serialised['http']['response']['status']);
+        $this->assertEquals(123, $serialised['aws']['account_id']);
     }
 }
