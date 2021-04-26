@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pkerrigan\Xray;
 
 /**
@@ -12,7 +14,7 @@ class RemoteSegment extends Segment
     /**
      * @inheritdoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $data = parent::jsonSerialize();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pkerrigan\Xray\Submission;
 
 use Pkerrigan\Xray\Segment;
@@ -18,18 +20,12 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
         'version' => 1
     ];
 
-    /**
-     * @var string
-     */
-    private $host;
+    private string $host;
+
+    private int $port;
 
     /**
-     * @var int
-     */
-    private $port;
-
-    /**
-     * @var resource
+     * @var \Socket|resource
      */
     private $socket;
 
@@ -45,11 +41,7 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
         socket_close($this->socket);
     }
 
-    /**
-     * @param Segment $segment
-     * @return void
-     */
-    public function submitSegment(Segment $segment)
+    public function submitSegment(Segment $segment): void
     {
         $packet = $this->buildPacket($segment);
         $packetLength = strlen($packet);
@@ -71,20 +63,12 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
         return implode("\n", array_map('json_encode', [self::HEADER, $segment]));
     }
 
-    /**
-     * @param string $packet
-     * @return void
-     */
-    private function sendPacket(string $packet)
+    private function sendPacket(string $packet): void
     {
         socket_sendto($this->socket, $packet, strlen($packet), 0, $this->host, $this->port);
     }
 
-    /**
-     * @param Segment $segment
-     * @return void
-     */
-    private function submitFragmented(Segment $segment)
+    private function submitFragmented(Segment $segment): void
     {
         $rawSegment = $segment->jsonSerialize();
         /** @var Segment[] $subsegments */
@@ -104,11 +88,7 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
         $this->sendPacket($completePacket);
     }
 
-    /**
-     * @param $rawSegment
-     * @return void
-     */
-    private function submitOpenSegment(array $openSegment)
+    private function submitOpenSegment(array $openSegment): void
     {
         unset($openSegment['end_time']);
         $openSegment['in_progress'] = true;

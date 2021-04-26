@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pkerrigan\Xray;
 
 /**
@@ -14,7 +16,7 @@ class HttpSegment extends RemoteSegment
     /**
      * @inheritdoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $data = parent::jsonSerialize();
 
@@ -23,11 +25,7 @@ class HttpSegment extends RemoteSegment
         return array_filter($data);
     }
 
-    /**
-     * @param bool $traced
-     * @return static
-     */
-    public function setTraced(bool $traced)
+    public function setTraced(bool $traced): self
     {
         $this->traced = $traced;
 

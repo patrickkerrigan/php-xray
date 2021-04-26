@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pkerrigan\Xray;
 
 use PHPUnit\Framework\TestCase;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class HttpSegmentTest extends TestCase
 {
-    public function testSerialisesCorrectly()
+    public function testSerialisesCorrectly(): void
     {
         $segment = new HttpSegment();
         $segment->setUrl('http://example.com/')
@@ -28,7 +30,7 @@ class HttpSegmentTest extends TestCase
         $this->assertEquals(300, $serialised['http']['response']['content_length']);
     }
 
-    public function testTracedSegmentSerialisesCorrectly()
+    public function testTracedSegmentSerialisesCorrectly(): void
     {
         $segment = new HttpSegment();
         $segment->setTraced(true);

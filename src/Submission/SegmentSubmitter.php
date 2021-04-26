@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pkerrigan\Xray\Submission;
 
 use Pkerrigan\Xray\Segment;
@@ -11,5 +13,5 @@ use Pkerrigan\Xray\Segment;
  */
 interface SegmentSubmitter
 {
-    public function submitSegment(Segment $segment);
+    public function submitSegment(Segment $segment): void;
 }
