@@ -30,6 +30,7 @@ class TraceTest extends TestCase
             ->setClientIpAddress('127.0.0.1')
             ->setUserAgent('TestAgent')
             ->setResponseCode(200)
+            ->setAwsAccountId(123)
             ->begin()
             ->end();
 
@@ -44,6 +45,7 @@ class TraceTest extends TestCase
         $this->assertEquals('TestAgent', $serialised['http']['request']['user_agent']);
         $this->assertEquals(200, $serialised['http']['response']['status']);
         $this->assertEquals($trace->getTraceId(), $serialised['trace_id']);
+        $this->assertEquals(123, $serialised['aws']['account_id']);
     }
 
     public function testGeneratesCorrectFormatTraceId()

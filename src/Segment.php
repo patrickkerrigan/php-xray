@@ -58,6 +58,10 @@ class Segment implements JsonSerializable
      */
     protected $independent = false;
     /**
+     * @var int|null
+     */
+    protected $awsAccountId = null;
+    /**
      * @var string[]
      */
     private $annotations;
@@ -233,6 +237,17 @@ class Segment implements JsonSerializable
     }
 
     /**
+     * @param int $awsAccountId
+     * @return $this
+     */
+    public function setAwsAccountId(int $awsAccountId)
+    {
+        $this->awsAccountId = $awsAccountId;
+
+        return $this;
+    }
+
+    /**
      * @param string $key
      * @param string $value
      * @return static
@@ -287,7 +302,15 @@ class Segment implements JsonSerializable
             'fault' => $this->fault,
             'error' => $this->error,
             'annotations' => empty($this->annotations) ? null : $this->annotations,
-            'metadata' => empty($this->metadata) ? null : $this->metadata
+            'metadata' => empty($this->metadata) ? null : $this->metadata,
+            'aws' => $this->serialiseAwsData(),
+        ]);
+    }
+
+    protected function serialiseAwsData(): array
+    {
+        return array_filter([
+            'account_id' => $this->awsAccountId,
         ]);
     }
 }
