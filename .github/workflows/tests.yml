@@ -32,5 +32,11 @@ jobs:
       - name: Install dependencies
         run: composer install -o --no-progress
 
-      - name: phpunit
-        run: vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v2.7.5
+        env:
+          CC_TEST_REPORTER_ID: ${{secrets.CODE_CLIMATE_ID}}
+        with:
+          coverageCommand: vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+          coverageLocations: |
+            ${{github.workspace}}/build/logs/clover.xml:clover
