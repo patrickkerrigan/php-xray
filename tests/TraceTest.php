@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TraceTest extends TestCase
 {
-    public function testGetInstanceReturnsSingleton()
+    public function testGetInstanceReturnsSingleton(): void
     {
         $instance1 = Trace::getInstance();
         $instance2 = Trace::getInstance();
@@ -19,7 +19,7 @@ class TraceTest extends TestCase
         $this->assertEquals(spl_object_hash($instance1), spl_object_hash($instance2));
     }
 
-    public function testSerialisesCorrectly()
+    public function testSerialisesCorrectly(): void
     {
         $trace = new Trace();
         $trace->setName('Test trace')
@@ -48,7 +48,7 @@ class TraceTest extends TestCase
         $this->assertEquals(123, $serialised['aws']['account_id']);
     }
 
-    public function testGeneratesCorrectFormatTraceId()
+    public function testGeneratesCorrectFormatTraceId(): void
     {
         $trace = new Trace();
         $trace->begin();
@@ -56,18 +56,17 @@ class TraceTest extends TestCase
         $this->assertRegExp('@^1\-[a-f0-9]{8}\-[a-f0-9]{24}$@', $trace->getTraceId());
     }
 
-    /**
-     * @expectedException \TypeError
-     */
-    public function testGivenNullHeaderDoesNotSetId()
+    public function testGivenNullHeaderDoesNotSetId(): void
     {
+        $this->expectException(\TypeError::class);
+
         $trace = new Trace();
         $trace->setTraceHeader(null);
 
         $trace->getTraceId();
     }
 
-    public function testGivenIdHeaderSetsId()
+    public function testGivenIdHeaderSetsId(): void
     {
         $traceId = '1-ab3169f3-1b7f38ac63d9037ef1843ca4';
 
@@ -79,7 +78,7 @@ class TraceTest extends TestCase
         $this->assertArrayNotHasKey('parent_id', $trace->jsonSerialize());
     }
 
-    public function testGivenSampledHeaderSetsSampled()
+    public function testGivenSampledHeaderSetsSampled(): void
     {
         $traceId = '1-ab3169f3-1b7f38ac63d9037ef1843ca4';
 
@@ -91,7 +90,7 @@ class TraceTest extends TestCase
         $this->assertArrayNotHasKey('parent_id', $trace->jsonSerialize());
     }
 
-    public function testGivenParentHeaderSetsParentId()
+    public function testGivenParentHeaderSetsParentId(): void
     {
         $traceId = '1-ab3169f3-1b7f38ac63d9037ef1843ca4';
         $parentId = '1234567890';

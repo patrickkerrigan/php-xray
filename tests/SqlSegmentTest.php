@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SqlSegmentTest extends TestCase
 {
-    public function testSerialisesCorrectly()
+    public function testSerialisesCorrectly(): void
     {
         $segment = new SqlSegment();
         $segment->setQuery('SELECT *')

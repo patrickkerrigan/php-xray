@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 class HttpSegmentTest extends TestCase
 {
-    public function testSerialisesCorrectly()
+    public function testSerialisesCorrectly(): void
     {
         $segment = new HttpSegment();
         $segment->setUrl('http://example.com/')
@@ -28,7 +28,7 @@ class HttpSegmentTest extends TestCase
         $this->assertEquals(123, $serialised['aws']['account_id']);
     }
 
-    public function testTracedSegmentSerialisesCorrectly()
+    public function testTracedSegmentSerialisesCorrectly(): void
     {
         $segment = new HttpSegment();
         $segment->setTraced(true);

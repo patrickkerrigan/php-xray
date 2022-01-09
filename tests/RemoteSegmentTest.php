@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 class RemoteSegmentTest extends TestCase
 {
-    public function testUntracedSegmentSerialisesCorrectly()
+    public function testUntracedSegmentSerialisesCorrectly(): void
     {
         $segment = new RemoteSegment();
 
@@ -22,7 +22,7 @@ class RemoteSegmentTest extends TestCase
         $this->assertArrayNotHasKey('traced', $serialised);
     }
 
-    public function testTracedSegmentSerialisesCorrectly()
+    public function testTracedSegmentSerialisesCorrectly(): void
     {
         $segment = new RemoteSegment();
         $segment->setTraced(true);

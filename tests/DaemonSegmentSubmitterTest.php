@@ -17,20 +17,20 @@ class DaemonSegmentSubmitterTest extends TestCase
      */
     private $socket;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
         socket_bind($this->socket, '127.0.0.1', 2000);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         socket_close($this->socket);
         parent::tearDown();
     }
 
-    public function testSubmitsToDaemon()
+    public function testSubmitsToDaemon(): void
     {
         $segment = new Segment();
         $segment->setSampled(true)
@@ -44,7 +44,7 @@ class DaemonSegmentSubmitterTest extends TestCase
         $this->assertPacketsReceived([$segment], $packets);
     }
 
-    public function testSubmitsLongTraceAsFragmented()
+    public function testSubmitsLongTraceAsFragmented(): void
     {
         $subsegment1 = (new SqlSegment())
             ->setQuery(str_repeat('a', 30000));
@@ -92,9 +92,9 @@ class DaemonSegmentSubmitterTest extends TestCase
      * @param $expectedPackets
      * @param $buffer
      */
-    private function assertPacketsReceived($expectedPackets, $buffer)
+    private function assertPacketsReceived($expectedPackets, $buffer): void
     {
-        for ($i = 0; $i < count($expectedPackets); $i++) {
+        for ($i = 0, $iMax = count($expectedPackets); $i < $iMax; $i++) {
             $this->assertEquals(
                 json_encode(DaemonSegmentSubmitter::HEADER) . "\n" . json_encode($expectedPackets[$i]),
                 $buffer[$i]
