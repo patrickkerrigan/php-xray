@@ -11,9 +11,9 @@ use Pkerrigan\Xray\Segment;
  */
 class DaemonSegmentSubmitter implements SegmentSubmitter
 {
-    const MAX_SEGMENT_SIZE = 64000;
+    public const MAX_SEGMENT_SIZE = 64000;
 
-    const HEADER = [
+    public const HEADER = [
         'format' => 'json',
         'version' => 1
     ];
@@ -75,7 +75,7 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
      * @param string $packet
      * @return void
      */
-    private function sendPacket(string $packet)
+    private function sendPacket(string $packet): void
     {
         socket_sendto($this->socket, $packet, strlen($packet), 0, $this->host, $this->port);
     }
@@ -84,7 +84,7 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
      * @param Segment $segment
      * @return void
      */
-    private function submitFragmented(Segment $segment)
+    private function submitFragmented(Segment $segment): void
     {
         $rawSegment = $segment->jsonSerialize();
         /** @var Segment[] $subsegments */
@@ -105,10 +105,10 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
     }
 
     /**
-     * @param $rawSegment
+     * @param array $openSegment
      * @return void
      */
-    private function submitOpenSegment(array $openSegment)
+    private function submitOpenSegment(array $openSegment): void
     {
         unset($openSegment['end_time']);
         $openSegment['in_progress'] = true;

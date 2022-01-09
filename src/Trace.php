@@ -140,7 +140,7 @@ class Trace extends Segment
         return array_filter($data);
     }
 
-    private function generateTraceId()
+    private function generateTraceId(): void
     {
         $startHex = dechex((int)$this->startTime);
         $uuid = bin2hex(random_bytes(12));
