@@ -53,7 +53,7 @@ class TraceTest extends TestCase
         $trace = new Trace();
         $trace->begin();
 
-        $this->assertRegExp('@^1\-[a-f0-9]{8}\-[a-f0-9]{24}$@', $trace->getTraceId());
+        self::assertMatchesRegularExpression('@^1\-[a-f0-9]{8}\-[a-f0-9]{24}$@', $trace->getTraceId());
     }
 
     public function testGivenNullHeaderDoesNotSetId(): void
@@ -101,5 +101,14 @@ class TraceTest extends TestCase
         $this->assertEquals($traceId, $trace->getTraceId());
         $this->assertTrue($trace->isSampled());
         $this->assertEquals($parentId, $trace->jsonSerialize()['parent_id']);
+    }
+
+    public static function assertMatchesRegularExpression(string $pattern, string $string, string $message = ''): void
+    {
+        if (version_compare(\PHPUnit\Runner\Version::id(), '9.1.0') === -1) {
+            self::assertRegExp($pattern, $string, $message);
+        } else {
+            parent::assertMatchesRegularExpression($pattern, $string, $message);
+        }
     }
 }
