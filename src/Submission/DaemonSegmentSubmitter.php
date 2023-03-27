@@ -52,7 +52,7 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
     public function submitSegment(Segment $segment)
     {
         $packet = $this->buildPacket($segment);
-        $packetLength = strlen($packet);
+        $packetLength = mb_strlen($packet);
 
         if ($packetLength > self::MAX_SEGMENT_SIZE) {
             $this->submitFragmented($segment);
@@ -77,7 +77,7 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
      */
     private function sendPacket(string $packet): void
     {
-        socket_sendto($this->socket, $packet, strlen($packet), 0, $this->host, $this->port);
+        socket_sendto($this->socket, $packet, mb_strlen($packet), 0, $this->host, $this->port);
     }
 
     /**
