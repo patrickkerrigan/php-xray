@@ -4,6 +4,16 @@ namespace Pkerrigan\Xray\Submission;
 
 use Pkerrigan\Xray\Segment;
 
+use function stream_socket_client;
+use function stream_set_write_buffer;
+use function fclose;
+use function fwrite;
+use function strlen;
+use function implode;
+use function json_encode;
+
+use const JSON_UNESCAPED_SLASHES;
+
 /**
  *
  * @author Patrick Kerrigan (patrickkerrigan.uk)
@@ -19,30 +29,26 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
     ];
 
     /**
-     * @var string
-     */
-    private $host;
-
-    /**
-     * @var int
-     */
-    private $port;
-
-    /**
      * @var resource
      */
     private $socket;
 
     public function __construct(string $host = '127.0.0.1', int $port = 2000)
     {
-        $this->host = $host;
-        $this->port = $port;
-        $this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+        $this->socket = stream_socket_client("udp://$host:$port");
+
+        if ($this->socket !== false) {
+            stream_set_write_buffer($this->socket, 0);
+        }
     }
 
     public function __destruct()
     {
-        socket_close($this->socket);
+        if ($this->socket === false) {
+            return;
+        }
+
+        fclose($this->socket);
     }
 
     /**
@@ -52,9 +58,8 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
     public function submitSegment(Segment $segment)
     {
         $packet = $this->buildPacket($segment);
-        $packetLength = strlen($packet);
 
-        if ($packetLength > self::MAX_SEGMENT_SIZE) {
+        if (strlen($packet) > self::MAX_SEGMENT_SIZE) {
             $this->submitFragmented($segment);
             return;
         }
@@ -68,7 +73,10 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
      */
     private function buildPacket($segment): string
     {
-        return implode("\n", array_map('json_encode', [self::HEADER, $segment]));
+        return implode("\n", [
+            json_encode(self::HEADER),
+            json_encode($segment, JSON_UNESCAPED_SLASHES)
+        ]);
     }
 
     /**
@@ -77,7 +85,11 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
      */
     private function sendPacket(string $packet): void
     {
-        socket_sendto($this->socket, $packet, strlen($packet), 0, $this->host, $this->port);
+        if ($this->socket === false) {
+            return;
+        }
+
+        fwrite($this->socket, $packet);
     }
 
     /**

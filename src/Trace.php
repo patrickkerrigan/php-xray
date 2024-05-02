@@ -2,6 +2,15 @@
 
 namespace Pkerrigan\Xray;
 
+use function explode;
+use function array_map;
+use function array_filter;
+use function array_column;
+use function random_int;
+use function random_bytes;
+use function dechex;
+use function bin2hex;
+
 /**
  *
  * @author Patrick Kerrigan (patrickkerrigan.uk)
@@ -29,7 +38,7 @@ class Trace extends Segment
      */
     public static function getInstance()
     {
-        if (is_null(self::$instance)) {
+        if (self::$instance === null) {
             self::$instance = new static();
         }
 
@@ -42,7 +51,7 @@ class Trace extends Segment
      */
     public function setTraceHeader(string $traceHeader = null)
     {
-        if (is_null($traceHeader)) {
+        if ($traceHeader === null) {
             return $this;
         }
 
@@ -114,7 +123,7 @@ class Trace extends Segment
     {
         parent::begin();
 
-        if (is_null($this->traceId)) {
+        if ($this->traceId === null) {
             $this->generateTraceId();
         }
 
@@ -142,7 +151,7 @@ class Trace extends Segment
 
     private function generateTraceId(): void
     {
-        $startHex = dechex((int)$this->startTime);
+        $startHex = dechex((int) $this->startTime);
         $uuid = bin2hex(random_bytes(12));
 
         $this->setTraceId("1-{$startHex}-{$uuid}");

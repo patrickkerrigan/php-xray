@@ -20,13 +20,18 @@ class DaemonSegmentSubmitterTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
-        socket_bind($this->socket, '127.0.0.1', 2000);
+        $_ = null;
+        $this->socket = stream_socket_server(
+            'udp://127.0.0.1:2000',
+            $_,
+            $_,
+            STREAM_SERVER_BIND
+        );
     }
 
     public function tearDown(): void
     {
-        socket_close($this->socket);
+        fclose($this->socket);
         parent::tearDown();
     }
 
@@ -34,7 +39,7 @@ class DaemonSegmentSubmitterTest extends TestCase
     {
         $segment = new Segment();
         $segment->setSampled(true)
-            ->setName('Test segment')
+            ->setName('Test segment / 1')
             ->begin()
             ->end()
             ->submit(new DaemonSegmentSubmitter());
@@ -96,7 +101,9 @@ class DaemonSegmentSubmitterTest extends TestCase
     {
         for ($i = 0, $iMax = count($expectedPackets); $i < $iMax; $i++) {
             $this->assertEquals(
-                json_encode(DaemonSegmentSubmitter::HEADER) . "\n" . json_encode($expectedPackets[$i]),
+                json_encode(DaemonSegmentSubmitter::HEADER)
+                . "\n" .
+                json_encode($expectedPackets[$i], JSON_UNESCAPED_SLASHES),
                 $buffer[$i]
             );
         }
@@ -108,12 +115,10 @@ class DaemonSegmentSubmitterTest extends TestCase
      */
     private function receivePackets(int $number): array
     {
-        $from = '';
-        $port = 0;
         $buffer = array_fill(0, $number, '');
 
         for ($i = 0; $i < $number; $i++) {
-            socket_recvfrom($this->socket, $buffer[$i], 65535, 0, $from, $port);
+            $buffer[$i] = stream_socket_recvfrom($this->socket, 65535);
         }
 
         return $buffer;

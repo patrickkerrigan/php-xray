@@ -2,6 +2,8 @@
 
 namespace Pkerrigan\Xray;
 
+use function array_filter;
+
 /**
  *
  * @author Patrick Kerrigan (patrickkerrigan.uk)
