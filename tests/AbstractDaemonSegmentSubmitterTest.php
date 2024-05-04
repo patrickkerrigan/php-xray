@@ -10,19 +10,22 @@ use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
  * @author Patrick Kerrigan (patrickkerrigan.uk)
  * @since 17/05/2018
  */
-class DaemonSegmentSubmitterTest extends TestCase
+abstract class AbstractDaemonSegmentSubmitterTest extends TestCase
 {
     /**
      * @var resource
      */
     private $socket;
 
+    abstract protected function getServerAddress(): string;
+    abstract protected function getSubmitter(): DaemonSegmentSubmitter;
+
     public function setUp(): void
     {
         parent::setUp();
         $_ = null;
         $this->socket = stream_socket_server(
-            'udp://127.0.0.1:2000',
+            $this->getServerAddress(),
             $_,
             $_,
             STREAM_SERVER_BIND
@@ -42,7 +45,7 @@ class DaemonSegmentSubmitterTest extends TestCase
             ->setName('Test segment / 1')
             ->begin()
             ->end()
-            ->submit(new DaemonSegmentSubmitter());
+            ->submit($this->getSubmitter());
 
         $packets = $this->receivePackets(1);
 
@@ -66,7 +69,7 @@ class DaemonSegmentSubmitterTest extends TestCase
                 ->addSubsegment($subsegment2)
                 ->addSubsegment($subsegment3)
                 ->end()
-                ->submit(new DaemonSegmentSubmitter());
+                ->submit($this->getSubmitter());
 
         $buffer = $this->receivePackets(5);
 

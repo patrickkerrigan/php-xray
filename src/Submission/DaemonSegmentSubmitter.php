@@ -35,6 +35,10 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
 
     public function __construct(string $host = '127.0.0.1', int $port = 2000)
     {
+        if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
+            $host = "[$host]";
+        }
+
         $this->socket = stream_socket_client("udp://$host:$port");
 
         if ($this->socket !== false) {
