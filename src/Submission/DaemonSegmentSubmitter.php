@@ -43,6 +43,7 @@ class DaemonSegmentSubmitter implements SegmentSubmitter
 
         if ($this->socket !== false) {
             stream_set_write_buffer($this->socket, 0);
+            stream_set_chunk_size($this->socket, 65535);
         }
     }
 
