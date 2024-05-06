@@ -5,6 +5,12 @@ namespace Pkerrigan\Xray;
 use JsonSerializable;
 use Pkerrigan\Xray\Submission\SegmentSubmitter;
 
+use function bin2hex;
+use function random_bytes;
+use function microtime;
+use function count;
+use function array_filter;
+
 /**
  *
  * @author Patrick Kerrigan (patrickkerrigan.uk)
@@ -224,7 +230,7 @@ class Segment implements JsonSerializable
      */
     public function isOpen(): bool
     {
-        return !is_null($this->startTime) && is_null($this->endTime);
+        return $this->startTime !== null && $this->endTime === null;
     }
 
     /**
