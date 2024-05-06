@@ -6,6 +6,7 @@ use Pkerrigan\Xray\Segment;
 
 use function stream_socket_client;
 use function stream_set_write_buffer;
+use function stream_set_chunk_size;
 use function fclose;
 use function fwrite;
 use function strlen;
