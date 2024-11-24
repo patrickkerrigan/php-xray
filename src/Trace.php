@@ -37,10 +37,10 @@ class Trace extends Segment
     }
 
     /**
-     * @param string $traceHeader
+     * @param string|null $traceHeader
      * @return static
      */
-    public function setTraceHeader(string $traceHeader = null)
+    public function setTraceHeader(?string $traceHeader = null)
     {
         if (is_null($traceHeader)) {
             return $this;
