@@ -196,10 +196,10 @@ class Segment implements JsonSerializable
     }
 
     /**
-     * @param string $parentId
+     * @param string|null $parentId
      * @return static
      */
-    public function setParentId(string $parentId = null)
+    public function setParentId(?string $parentId = null)
     {
         $this->parentId = $parentId;
 
